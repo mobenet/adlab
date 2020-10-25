@@ -106,7 +106,19 @@ public class ImageWS {
      */
     @WebMethod(operationName = "ModifyImage")
     public int ModifyImage(@WebParam(name = "image") Image image) {
-        //TODO write your implementation code here:
+        try {
+            OurDao.startDB();
+            String title = image.getTitle();
+            String desc = image.getDescription();
+            String key = image.getKeywords();
+            String data = image.getCreationDate();
+            String filename = image.getFileName();
+            int id = image.getId();
+            boolean ok = OurDao.enregistrarCanvi(title, desc, key, data, filename, id);
+            OurDao.stopDB();
+        } catch (ClassNotFoundException | SQLException e){
+            System.err.println(e.getMessage());
+        }
         return 0;
     }
 
@@ -118,8 +130,15 @@ public class ImageWS {
      */
     @WebMethod(operationName = "DeleteImage")
     public int DeleteImage(@WebParam(name = "image") Image image) {
-        //TODO write your implementation code here:
-        return 0;
+        try{
+            OurDao.startDB();
+            int id = image.getId(); 
+            boolean res = OurDao.eliminar(id);
+            OurDao.stopDB();
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return image.getId();
     }
 
     /**
