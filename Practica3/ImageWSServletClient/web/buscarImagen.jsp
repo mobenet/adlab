@@ -22,10 +22,6 @@
         <form method="POST" action="buscarImagen" enctype="multipart/form-data">
             Titulo: 
             <input type="text" value="" name="title"><br><br>
-            Nombre del archivo
-            <input type="text" name="filename"><br><br>
-            Descripción: 
-            <input type="text" name="description"><br><br>
             Palabras clave: 
             <input type="text" name="keywords"><br><br>
             Autor: 
