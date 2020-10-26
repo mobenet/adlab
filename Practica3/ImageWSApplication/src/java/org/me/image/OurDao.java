@@ -128,7 +128,6 @@ public class OurDao {
                 case "id":
                     query += "ID = ?";
                     PreparedStatement statement = connection.prepareStatement(query);
-                    System.err.println("DEBUG: "+query);
                     statement.setInt(1, Integer.parseInt(consultas.get("id")));
                     return statement.executeQuery();
                 case "title":

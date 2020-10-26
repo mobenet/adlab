@@ -12,15 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpSession;
 import javax.xml.ws.WebServiceRef;
+import org.me.image.Image;
 import org.me.image.ImageWS_Service;
 
 /**
@@ -56,30 +58,29 @@ public class buscarImagen extends HttpServlet {
             response.sendRedirect("login.jsp");
         } else {
             try (PrintWriter out = response.getWriter()) {
-                /* TODO output your page here. You may use following sample code. */
 
-                HashMap<String, String> map = new HashMap<>();
-                if (!"".equals(request.getParameter("title"))) {
-                    map.put("title", "%" + request.getParameter("title") + "%");//
+                String author = request.getParameter("author");
+                String creationDate = request.getParameter("cdate");
+                String keywords = request.getParameter("keywords");
+                String title = request.getParameter("title");
+                ArrayList<List<Object>> searchArray = new ArrayList<>();
+                if (title != null) {
+                    searchArray.add(searchbyTitle(title));
                 }
-                if (!"".equals(request.getParameter("description"))) {
-                    map.put("description", "%" + request.getParameter("description") + "%");
+                if (keywords != null) {
+                    searchArray.add(searchbyKeywords(keywords));
                 }
-                if (!"".equals(request.getParameter("keywords"))) {
-                    map.put("keywords", "%" + request.getParameter("keywords") + "%");
+                if (author != null) {
+                    searchArray.add(searchbyAuthor(author));
                 }
-                if (!"".equals(request.getParameter("author"))) {
-                    map.put("author", "%" + request.getParameter("author") + "%");
+                if (creationDate != null) {
+                    searchArray.add(searchbyCreaDate(creationDate));
                 }
-                if (!"".equals(request.getParameter("cdate"))) {
-                    map.put("cdate", "%" + request.getParameter("cdate") + "%");
-                }
-                if (!"".equals(request.getParameter("filename"))) {
-                    map.put("filename", "%" + request.getParameter("filename") + "%");
-                }
+
+                List<Image> searchResult = combineSearch(searchArray);
+
                 //afageixo el % per buscar patrons, paraules dintre de paraules
-
-                if (map.isEmpty()) {
+                if (searchResult.isEmpty()) {
 
                     out.println("No hay resultados con las entradas correspondientes");
                     out.print("<br><br>");
@@ -92,8 +93,6 @@ public class buscarImagen extends HttpServlet {
                     out.println(resp);
                     out.print("<br><br>");
                 } else {
-                    ResultSet rs;
-                    //rs = OurDao.consultar(map);
                     out.println("Listado de imagenes: <br>");
 
                     out.println("<table>\n"
@@ -106,18 +105,18 @@ public class buscarImagen extends HttpServlet {
                             + "                <th>Fecha de subida</th>\n"
                             + "                <th>Nombre del archivo</th>\n"
                             + "            </tr>");
-                    /*while (rs.next()) {
+                    for(Image img: searchResult){
                         out.println("<tr>");
-                        out.println("<td>" + rs.getString("TITLE") + "</td>");
-                        out.println("<td>" + rs.getString("DESCRIPTION") + "</td>");
-                        out.println("<td>" + rs.getString("KEYWORDS") + "</td>");
-                        String autor = rs.getString("AUTHOR");
+                        out.println("<td>" + img.getTitle() + "</td>");
+                        out.println("<td>" + img.getDescription() + "</td>");
+                        out.println("<td>" + img.getKeywords() + "</td>");
+                        String autor = img.getAuthor();
                         out.println("<td>" + autor + "</td>");
-                        out.println("<td>" + rs.getString("CREATION_DATE") + "</td>");
-                        out.println("<td>" + rs.getString("STORAGE_DATE") + "</td>");
-                        String filename = rs.getString("FILENAME");
-                        int id = rs.getInt("ID");
-                        out.println("<td><a href=image.jsp?name=" + filename + "&id=" + id + ">" + filename + "</a>");
+                        out.println("<td>" + img.getCreationDate() + "</td>");
+                        out.println("<td>" + img.getStorageDate() + "</td>");
+                        String filename = img.getFileName();
+                        int id = img.getId();
+                        out.println("<td><a href=showImage?id=" + id + ">" + filename + "</a>");
                         if (autor.equals(user)) {
                             out.println("<form action=selectImage method=\"POST\">"
                                     + "<input type=\"hidden\" value=\"" + filename + "\" name=\"name\"/>"
@@ -125,7 +124,7 @@ public class buscarImagen extends HttpServlet {
                                     + "<input type=\"submit\" value=\"Modificar\" name=\"action\"/>"
                                     + "<input type=\"submit\" value=\"Eliminar\" name=\"action\"/> </form> </td>");
                         }
-                    }*/
+                    }
                     out.println("</table>");
                     out.println("<a href=\"buscarImagen.jsp\">Hacer otra busqueda</a><br><br>");
                     out.println("<a href=\"menu.jsp\">Vuelve al menu</a>");
@@ -182,5 +181,55 @@ public class buscarImagen extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    private List<Image> combineSearch(List<List<Object>> searchResult){
+        if(searchResult.isEmpty())return Arrays.asList();
+        ArrayList<Image> res = new ArrayList<>();
+        searchResult.get(0).forEach(o -> {
+            Image img = (Image)o;
+            res.add(img);
+        });
+        searchResult.forEach(list -> {
+            ArrayList<Image> tmp = new ArrayList<>();
+            list.forEach(o -> {
+                Image img = (Image)o;
+                tmp.add(img);
+            });
+            intersect(res,tmp);
+        });
+        return res;
+    }
+    
+    private void intersect(ArrayList<Image> acc, List<Image> other){
+        acc.removeIf(e -> !other.stream().anyMatch(img -> (img.getId() == e.getId())));
+    }
+
+    private java.util.List<java.lang.Object> searchbyAuthor(java.lang.String author) {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        org.me.image.ImageWS port = service.getImageWSPort();
+        return port.searchbyAuthor(author);
+    }
+
+    private java.util.List<java.lang.Object> searchbyCreaDate(java.lang.String creaDate) {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        org.me.image.ImageWS port = service.getImageWSPort();
+        return port.searchbyCreaDate(creaDate);
+    }
+
+    private java.util.List<java.lang.Object> searchbyKeywords(java.lang.String keywords) {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        org.me.image.ImageWS port = service.getImageWSPort();
+        return port.searchbyKeywords(keywords);
+    }
+
+    private java.util.List<java.lang.Object> searchbyTitle(java.lang.String title) {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        org.me.image.ImageWS port = service.getImageWSPort();
+        return port.searchbyTitle(title);
+    }
 
 }
