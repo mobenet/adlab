@@ -72,7 +72,7 @@ public class list extends HttpServlet {
                         out.println("<td>" + autor + "</td>");
                         out.println("<td>" + img.getCreationDate() + "</td>");
                         out.println("<td>" + img.getStorageDate() + "</td>");
-                        out.println("<td><a href=image.jsp?name=" + filename + "&id=" + id + ">" + filename + "</a>");
+                        out.println("<td><a href=showImage?id=" + id + ">" + filename + "</a>");
                         if (autor.equals(user)) {
                             out.println("<form action = selectImage method = \"POST\">"
                                     + "<input type = \"hidden\" value = \"" + filename + "\" name = \"name\" />"

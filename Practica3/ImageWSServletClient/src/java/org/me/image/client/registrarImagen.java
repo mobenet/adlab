@@ -167,7 +167,7 @@ public class registrarImagen extends HttpServlet {
     private int registerImage(org.me.image.Image image) {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
-        org.me.image.ImageWS port = service.getImageWSPort(new MTOMFeature());
+        org.me.image.ImageWS port = service.getImageWSPort(new MTOMFeature(10240));
         return port.registrerImage(image);
     }
 }

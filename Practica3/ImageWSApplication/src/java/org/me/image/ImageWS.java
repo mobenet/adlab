@@ -5,12 +5,17 @@
  */
 package org.me.image;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
@@ -21,7 +26,7 @@ import javax.xml.ws.soap.MTOM;
  *
  * @author Samuel
  */
-@MTOM(threshold = 2048)
+@MTOM(threshold = 10240)
 @WebService(serviceName = "ImageWS")
 public class ImageWS {
 
@@ -64,9 +69,11 @@ public class ImageWS {
             String projectName = "ImageWSApplication";
             basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
             final String path = basepath + projectName + "/web/images/";
-            
+
             File newdir = new File(path);
-            if(!newdir.exists())newdir.mkdir();
+            if (!newdir.exists()) {
+                newdir.mkdir();
+            }
 
             try (BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(path + image.getImageName()))) {
                 outStream.write(image.getBytes());
@@ -151,8 +158,51 @@ public class ImageWS {
     @WebMethod(operationName = "SearchbyId")
     public Image SearchbyId(@WebParam(name = "id") int id
     ) {
-        //TODO write your implementation code here:
-        return null;
+        Image tmp = new Image();//cambiar
+        try {
+            //TODO write your implementation code here:
+            HashMap<String, String> map = new HashMap<>();
+            map.put("id", String.valueOf(id));//controlar el sql injection
+            OurDao.startDB(); // els stopDB shan de posar? 
+            ResultSet res;
+            res = OurDao.consultar(map);
+            if(res==null)return null;
+            if (res.next()) {
+                tmp.setId(res.getInt("ID"));
+                tmp.setTitle(res.getString("TITLE"));
+                tmp.setAuthor(res.getString("AUTHOR"));
+                tmp.setDescription(res.getString("DESCRIPTION"));
+                tmp.setKeywords(res.getString("KEYWORDS"));
+                tmp.setCreationDate(res.getString("CREATION_DATE"));
+                tmp.setStorageDate(res.getString("STORAGE_DATE"));
+                tmp.setFileName(res.getString("FILENAME"));
+            }
+            OurDao.stopDB();
+
+            //Leer imagen del sistema de ficheros
+            String basepath = ImageWS.class
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath();
+            String projectName = "ImageWSApplication";
+            basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
+            final String path = basepath + projectName + "/web/images/";
+            File imageFile = new File(path + tmp.getImageName());
+            FileInputStream fis = new FileInputStream(imageFile);
+            byte[] imageBytes;
+            try (BufferedInputStream inStream = new BufferedInputStream(fis)) {
+                imageBytes = new byte[(int) imageFile.length()];
+                inStream.read(imageBytes);
+            }
+            tmp.setBytes(imageBytes);
+
+        } catch (ClassNotFoundException | IOException | SQLException ex) {
+            System.err.println(ex.getMessage());
+            return null;
+        }
+        //q pasa si la imagen es vacia
+        return tmp;
     }
 
     /**
@@ -164,8 +214,31 @@ public class ImageWS {
     @WebMethod(operationName = "SearchbyTitle")
     public List SearchbyTitle(@WebParam(name = "title") String title
     ) {
-        //TODO write your implementation code here:
-        return null;
+        ArrayList<Image> lista = new ArrayList<>();
+        try {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("title", "%" + title + "%");//controlar el sql ijection
+            OurDao.startDB();
+            ResultSet res;
+            res = OurDao.consultar(map);
+            while (res.next()) {
+                Image tmp = new Image();
+                tmp.setId(res.getInt("ID"));
+                tmp.setTitle(res.getString("TITLE"));
+                tmp.setAuthor(res.getString("AUTHOR"));
+                tmp.setDescription(res.getString("DESCRIPTION"));
+                tmp.setKeywords(res.getString("KEYWORDS"));
+                tmp.setCreationDate(res.getString("CREATION_DATE"));
+                tmp.setStorageDate(res.getString("STORAGE_DATE"));
+                tmp.setFileName(res.getString("FILENAME"));
+                lista.add(tmp);
+            }
+            OurDao.stopDB();
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        return lista;
     }
 
     /**
@@ -177,8 +250,31 @@ public class ImageWS {
     @WebMethod(operationName = "SearchbyCreaDate")
     public List SearchbyCreaDate(@WebParam(name = "creaDate") String creaDate
     ) {
-        //TODO write your implementation code here:
-        return null;
+        ArrayList<Image> lista = new ArrayList<>();
+        try {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("cdate", "%" + creaDate + "%");//controlar el sql ijection
+            OurDao.startDB();
+            ResultSet res;
+            res = OurDao.consultar(map);
+            while (res.next()) {
+                Image tmp = new Image();
+                tmp.setId(res.getInt("ID"));
+                tmp.setTitle(res.getString("TITLE"));
+                tmp.setAuthor(res.getString("AUTHOR"));
+                tmp.setDescription(res.getString("DESCRIPTION"));
+                tmp.setKeywords(res.getString("KEYWORDS"));
+                tmp.setCreationDate(res.getString("CREATION_DATE"));
+                tmp.setStorageDate(res.getString("STORAGE_DATE"));
+                tmp.setFileName(res.getString("FILENAME"));
+                lista.add(tmp);
+            }
+            OurDao.stopDB();
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        return lista;
     }
 
     /**
@@ -190,8 +286,31 @@ public class ImageWS {
     @WebMethod(operationName = "SearchbyAuthor")
     public List SearchbyAuthor(@WebParam(name = "author") String author
     ) {
-        //TODO write your implementation code here:
-        return null;
+        ArrayList<Image> lista = new ArrayList<>();
+        try {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("author", "%" + author + "%");//controlar el sql ijection
+            OurDao.startDB();
+            ResultSet res;
+            res = OurDao.consultar(map);
+            while (res.next()) {
+                Image tmp = new Image();
+                tmp.setId(res.getInt("ID"));
+                tmp.setTitle(res.getString("TITLE"));
+                tmp.setAuthor(res.getString("AUTHOR"));
+                tmp.setDescription(res.getString("DESCRIPTION"));
+                tmp.setKeywords(res.getString("KEYWORDS"));
+                tmp.setCreationDate(res.getString("CREATION_DATE"));
+                tmp.setStorageDate(res.getString("STORAGE_DATE"));
+                tmp.setFileName(res.getString("FILENAME"));
+                lista.add(tmp);
+            }
+            OurDao.stopDB();
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        return lista;
     }
 
     /**
@@ -203,8 +322,32 @@ public class ImageWS {
     @WebMethod(operationName = "SearchbyKeywords")
     public List SearchbyKeywords(@WebParam(name = "keywords") String keywords
     ) {
-        //TODO write your implementation code here:
-        return null;
+        ArrayList<Image> lista = new ArrayList<>();
+        try {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("keywords", "%" + keywords + "%");//controlar el sql ijection
+            OurDao.startDB();
+            ResultSet res;
+            res = OurDao.consultar(map);
+            while (res.next()) {
+                Image tmp = new Image();
+                tmp.setId(res.getInt("ID"));
+                tmp.setTitle(res.getString("TITLE"));
+                tmp.setAuthor(res.getString("AUTHOR"));
+                tmp.setDescription(res.getString("DESCRIPTION"));
+                tmp.setKeywords(res.getString("KEYWORDS"));
+                tmp.setCreationDate(res.getString("CREATION_DATE"));
+                tmp.setStorageDate(res.getString("STORAGE_DATE"));
+                tmp.setFileName(res.getString("FILENAME"));
+                lista.add(tmp);
+            }
+            OurDao.stopDB();
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+
+        return lista;
     }
 
     /**
