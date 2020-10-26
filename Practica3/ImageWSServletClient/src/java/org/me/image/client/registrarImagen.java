@@ -5,12 +5,9 @@
  */
 package org.me.image.client;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import javax.xml.ws.WebServiceRef;
@@ -77,57 +74,35 @@ public class registrarImagen extends HttpServlet {
         final String path = basepath + "ImageWSServletClient/web/images";
 
         Image img = new Image();
+        img.setTitle(request.getParameter("titulo"));
+        img.setAuthor(request.getParameter("author"));
+        img.setCreationDate(request.getParameter("fechaC"));
+        img.setKeywords(request.getParameter("clave"));
+        img.setDescription(request.getParameter("descripcion"));
+        img.setFileName(fileName);
+        byte[] imageBytes = readImageBytes(filePart);
+        if(imageBytes == null){
+            response.sendRedirect("error.jsp");
+            System.err.println("No se ha podido leer la imagen correctamente");
+        } else img.setBytes(imageBytes);
+        int id = registerImage(img);
         try (PrintWriter out = response.getWriter()) {
-            img.setTitle(request.getParameter("titulo"));
-            img.setAuthor(request.getParameter("author"));
-            img.setCreationDate(request.getParameter("fechaC"));
-            img.setKeywords(request.getParameter("clave"));
-            img.setDescription(request.getParameter("descripcion"));
-            img.setFileName(fileName);
-            int id = registerImage(img);
-            //Temporal
-            if (!saveImage(filePart, id, fileName, path)) {
-                System.err.println("La imagen no se ha guardado correctamente");
-            }
             out.println("<p>Se ha registrado la imagen exitosamente</p>");
             out.println("<a href=\"menu.jsp\">Vuelve al Menu</a>");
         }
 
     }
 
-    private boolean saveImage(Part image, int imageId, String filename, String path) throws IOException {
+    private byte[] readImageBytes(Part imagePart) {
 
-        OutputStream outta = null;
-        InputStream filecontent = null;
-        boolean saved = false;
-        try {
-
-            File dir = new File(path);
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-
-            outta = new FileOutputStream(new File(path + File.separator + selectImage.getImageName(imageId, filename)));
-            filecontent = image.getInputStream();
-
-            int read = 0;
-            final byte[] bytes = new byte[1024];
-
-            while ((read = filecontent.read(bytes)) != -1) {
-                outta.write(bytes, 0, read);
-            }
-            saved = true;
+        byte[] imageBytes = new byte[(int) imagePart.getSize()];
+        try (InputStream is = imagePart.getInputStream()) {
+            is.read(imageBytes);
         } catch (IOException e) {
             System.err.println(e.getMessage());
-        } finally {
-            if (outta != null) {
-                outta.close();
-            }
-            if (filecontent != null) {
-                filecontent.close();
-            }
-            return saved;
+            return null;
         }
+        return imageBytes;
     }
 
     private String getFileName(final Part part) {

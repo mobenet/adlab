@@ -6,7 +6,9 @@
 package org.me.image;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +21,7 @@ import javax.xml.ws.soap.MTOM;
  *
  * @author Samuel
  */
-@MTOM(threshold=2048)
+@MTOM(threshold = 2048)
 @WebService(serviceName = "ImageWS")
 public class ImageWS {
 
@@ -35,20 +37,8 @@ public class ImageWS {
             //throw new FileNotFoundException();
             return -1;
         }
-
-        //Escribe imagen en el directorio web/images
-        String basepath = ImageWS.class
-                .getProtectionDomain()
-                .getCodeSource()
-                .getLocation()
-                .getPath();
-        String projectName = "ImageWSApplication";
-        basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
-        final String path = basepath + projectName + "/web/images/";
-        try (BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(path + image.getImageName()))) {
-
-            outStream.write(image.getBytes());
-            image.setStorageDate(LocalDate.now().toString()); //.format(DateTimeFormatter.ofPattern("yyy-MM-dd"));
+        image.setStorageDate(LocalDate.now().toString());
+        try {
 
             //BBDD
             OurDao.startDB();
@@ -65,7 +55,24 @@ public class ImageWS {
             );
             OurDao.stopDB();
 
-        } catch (Exception e) {
+            //Escribe imagen en el directorio web/images
+            String basepath = ImageWS.class
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath();
+            String projectName = "ImageWSApplication";
+            basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
+            final String path = basepath + projectName + "/web/images/";
+            
+            File newdir = new File(path);
+            if(!newdir.exists())newdir.mkdir();
+
+            try (BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(path + image.getImageName()))) {
+                outStream.write(image.getBytes());
+            }
+
+        } catch (IOException | ClassNotFoundException | SQLException e) {
             System.err.println(e.getMessage());
         }
         return image.getId();
@@ -78,7 +85,8 @@ public class ImageWS {
      * @return
      */
     @WebMethod(operationName = "ModifyImage")
-    public int ModifyImage(@WebParam(name = "image") Image image) {
+    public int ModifyImage(@WebParam(name = "image") Image image
+    ) {
         try {
             OurDao.startDB();
             String title = image.getTitle();
@@ -102,7 +110,8 @@ public class ImageWS {
      * @return
      */
     @WebMethod(operationName = "DeleteImage")
-    public int DeleteImage(@WebParam(name = "image") Image image) {
+    public int DeleteImage(@WebParam(name = "image") Image image
+    ) {
         try {
             OurDao.startDB();
             int id = image.getId();
@@ -140,7 +149,8 @@ public class ImageWS {
      * @return
      */
     @WebMethod(operationName = "SearchbyId")
-    public Image SearchbyId(@WebParam(name = "id") int id) {
+    public Image SearchbyId(@WebParam(name = "id") int id
+    ) {
         //TODO write your implementation code here:
         return null;
     }
@@ -152,7 +162,8 @@ public class ImageWS {
      * @return
      */
     @WebMethod(operationName = "SearchbyTitle")
-    public List SearchbyTitle(@WebParam(name = "title") String title) {
+    public List SearchbyTitle(@WebParam(name = "title") String title
+    ) {
         //TODO write your implementation code here:
         return null;
     }
@@ -164,7 +175,8 @@ public class ImageWS {
      * @return
      */
     @WebMethod(operationName = "SearchbyCreaDate")
-    public List SearchbyCreaDate(@WebParam(name = "creaDate") String creaDate) {
+    public List SearchbyCreaDate(@WebParam(name = "creaDate") String creaDate
+    ) {
         //TODO write your implementation code here:
         return null;
     }
@@ -176,7 +188,8 @@ public class ImageWS {
      * @return
      */
     @WebMethod(operationName = "SearchbyAuthor")
-    public List SearchbyAuthor(@WebParam(name = "author") String author) {
+    public List SearchbyAuthor(@WebParam(name = "author") String author
+    ) {
         //TODO write your implementation code here:
         return null;
     }
@@ -188,7 +201,8 @@ public class ImageWS {
      * @return
      */
     @WebMethod(operationName = "SearchbyKeywords")
-    public List SearchbyKeywords(@WebParam(name = "keywords") String keywords) {
+    public List SearchbyKeywords(@WebParam(name = "keywords") String keywords
+    ) {
         //TODO write your implementation code here:
         return null;
     }
@@ -201,7 +215,9 @@ public class ImageWS {
      * @return
      */
     @WebMethod(operationName = "registerUser")
-    public boolean registerUser(@WebParam(name = "username") String username, @WebParam(name = "password") String password) {
+    public boolean registerUser(@WebParam(name = "username") String username,
+            @WebParam(name = "password") String password
+    ) {
         try {
             OurDao.startDB();
             if (!OurDao.validatePassword(password) || !OurDao.validateUsername(username)) {
@@ -224,7 +240,9 @@ public class ImageWS {
      * @return
      */
     @WebMethod(operationName = "loginUser")
-    public boolean loginUser(@WebParam(name = "username") String username, @WebParam(name = "password") String password) {
+    public boolean loginUser(@WebParam(name = "username") String username,
+            @WebParam(name = "password") String password
+    ) {
         boolean logged = false;
         try {
             OurDao.startDB();
