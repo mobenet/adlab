@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="author" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="bytes" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/&gt;
  *         &lt;element name="creationDate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="fileName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
@@ -35,6 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "image", propOrder = {
     "author",
+    "bytes",
     "creationDate",
     "description",
     "fileName",
@@ -46,6 +48,7 @@ import javax.xml.bind.annotation.XmlType;
 public class Image {
 
     protected String author;
+    protected byte[] bytes;
     protected String creationDate;
     protected String description;
     protected String fileName;
@@ -76,6 +79,28 @@ public class Image {
      */
     public void setAuthor(String value) {
         this.author = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad bytes.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getBytes() {
+        return bytes;
+    }
+
+    /**
+     * Define el valor de la propiedad bytes.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setBytes(byte[] value) {
+        this.bytes = value;
     }
 
     /**

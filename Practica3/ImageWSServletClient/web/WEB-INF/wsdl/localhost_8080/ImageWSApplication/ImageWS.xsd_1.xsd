@@ -92,6 +92,7 @@
 <xs:complexType name="image">
 <xs:sequence>
 <xs:element name="author" type="xs:string" minOccurs="0"/>
+<xs:element name="bytes" type="xs:base64Binary" minOccurs="0"/>
 <xs:element name="creationDate" type="xs:string" minOccurs="0"/>
 <xs:element name="description" type="xs:string" minOccurs="0"/>
 <xs:element name="fileName" type="xs:string" minOccurs="0"/>
@@ -108,6 +109,18 @@
 </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="DeleteImage">
+<xs:sequence>
+<xs:element name="image" type="tns:image" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="DeleteImageResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="loginUser">
 <xs:sequence>
 <xs:element name="username" type="xs:string" minOccurs="0"/>
@@ -118,18 +131,6 @@
 <xs:complexType name="loginUserResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:boolean"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="DeleteImage">
-<xs:sequence>
-<xs:element name="image" type="tns:image" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="DeleteImageResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:int"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -157,6 +158,16 @@
 </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="getUsers">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getUsersResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="SearchbyAuthor">
 <xs:sequence>
 <xs:element name="author" type="xs:string" minOccurs="0"/>
@@ -166,16 +177,6 @@
 <xs:complexType name="SearchbyAuthorResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:anyType" minOccurs="0" maxOccurs="unbounded"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="getUsers">
-<xs:sequence/>
-</xs:complexType>
-
-<xs:complexType name="getUsersResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 </xs:sequence>
 </xs:complexType>
 
