@@ -4,7 +4,6 @@
     Author     : mo
 --%>
 
-<%@page import="java.sql.ResultSet"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
@@ -19,7 +18,7 @@
             String user = (String) ses.getAttribute("user");
             if(user == null) {
                 response.sendRedirect("login.jsp");
-            } else {
+            }
         %>
         
         <h2>Escribe todos los valores, tanto los que quieras modificar com los que no</h2>  

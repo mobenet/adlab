@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.ws.WebServiceRef;
-import org.me.image.ImageWS_Service;
 
 /**
  *
@@ -21,9 +19,6 @@ import org.me.image.ImageWS_Service;
  */
 @WebServlet(name = "selectImage", urlPatterns = {"/selectImage"})
 public class selectImage extends HttpServlet {
-    
-    @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_8080/ImageWSApplication/ImageWS.wsdl")
-    private ImageWS_Service service;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,27 +31,34 @@ public class selectImage extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setContentType("text/html;charset=UTF-8");
         HttpSession ses = request.getSession(false);
-        if(ses.getAttribute("user") == null) response.sendRedirect("login.jsp");
-        else {
+        if (ses.getAttribute("user") == null) {
+            response.sendRedirect("login.jsp");
+        } else {
             int id = Integer.parseInt(request.getParameter("id"));
             ses.setAttribute("imageId", id);
             ses.setAttribute("imageName", request.getParameter("name"));
             String action = request.getParameter("action");
-            if("Modificar".equals(action)) response.sendRedirect("modificarImagen.jsp");
-            else if("Eliminar".equals(action)) response.sendRedirect("eliminarImagen.jsp");
-            else response.sendRedirect("error.jsp");
+            if ("Modificar".equals(action)) {
+                response.sendRedirect("modificarImagen.jsp");
+            } else if ("Eliminar".equals(action)) {
+                response.sendRedirect("eliminarImagen.jsp");
+            } else {
+                response.sendRedirect("error.jsp");
+            }
         }
     }
-    
-    public static String getImageName(int id, String filename){
-        
-        if(filename==null || filename.isEmpty()) return null;
+
+    public static String getImageName(int id, String filename) {
+
+        if (filename == null || filename.isEmpty()) {
+            return null;
+        }
         String[] splitted = filename.split("\\.");
-        if(splitted.length != 2){
-            System.err.println("Nombre de archivo incompatible: "+ filename +" Tamaño: "+splitted.length);
+        if (splitted.length != 2) {
+            System.err.println("Nombre de archivo incompatible: " + filename + " Tamaño: " + splitted.length);
             return null;
         }
         return splitted[0] + Integer.toString(id) + '.' + splitted[1];
