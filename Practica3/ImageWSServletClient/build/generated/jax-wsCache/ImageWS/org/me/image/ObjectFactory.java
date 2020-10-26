@@ -42,6 +42,8 @@ public class ObjectFactory {
     private final static QName _SearchbyKeywordsResponse_QNAME = new QName("http://image.me.org/", "SearchbyKeywordsResponse");
     private final static QName _SearchbyTitle_QNAME = new QName("http://image.me.org/", "SearchbyTitle");
     private final static QName _SearchbyTitleResponse_QNAME = new QName("http://image.me.org/", "SearchbyTitleResponse");
+    private final static QName _GetUsers_QNAME = new QName("http://image.me.org/", "getUsers");
+    private final static QName _GetUsersResponse_QNAME = new QName("http://image.me.org/", "getUsersResponse");
     private final static QName _LoginUser_QNAME = new QName("http://image.me.org/", "loginUser");
     private final static QName _LoginUserResponse_QNAME = new QName("http://image.me.org/", "loginUserResponse");
     private final static QName _RegisterUser_QNAME = new QName("http://image.me.org/", "registerUser");
@@ -196,6 +198,22 @@ public class ObjectFactory {
      */
     public SearchbyTitleResponse createSearchbyTitleResponse() {
         return new SearchbyTitleResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetUsers }
+     * 
+     */
+    public GetUsers createGetUsers() {
+        return new GetUsers();
+    }
+
+    /**
+     * Create an instance of {@link GetUsersResponse }
+     * 
+     */
+    public GetUsersResponse createGetUsersResponse() {
+        return new GetUsersResponse();
     }
 
     /**
@@ -398,6 +416,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://image.me.org/", name = "SearchbyTitleResponse")
     public JAXBElement<SearchbyTitleResponse> createSearchbyTitleResponse(SearchbyTitleResponse value) {
         return new JAXBElement<SearchbyTitleResponse>(_SearchbyTitleResponse_QNAME, SearchbyTitleResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetUsers }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://image.me.org/", name = "getUsers")
+    public JAXBElement<GetUsers> createGetUsers(GetUsers value) {
+        return new JAXBElement<GetUsers>(_GetUsers_QNAME, GetUsers.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetUsersResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://image.me.org/", name = "getUsersResponse")
+    public JAXBElement<GetUsersResponse> createGetUsersResponse(GetUsersResponse value) {
+        return new JAXBElement<GetUsersResponse>(_GetUsersResponse_QNAME, GetUsersResponse.class, null, value);
     }
 
     /**

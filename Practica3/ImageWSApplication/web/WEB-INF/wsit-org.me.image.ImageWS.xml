@@ -27,6 +27,8 @@
     <message name="registerUserResponse"/>
     <message name="loginUser"/>
     <message name="loginUserResponse"/>
+    <message name="getUsers"/>
+    <message name="getUsersResponse"/>
     <portType name="ImageWS">
         <operation name="RegistrerImage">
             <input message="tns:RegistrerImage"/>
@@ -72,6 +74,10 @@
             <input message="tns:loginUser"/>
             <output message="tns:loginUserResponse"/>
         </operation>
+        <operation name="getUsers">
+            <input message="tns:getUsers"/>
+            <output message="tns:getUsersResponse"/>
+        </operation>
     </portType>
     <binding name="ImageWSPortBinding" type="tns:ImageWS">
         <wsp:PolicyReference URI="#ImageWSPortBindingPolicy"/>
@@ -116,6 +122,10 @@
             <output/>
         </operation>
         <operation name="loginUser">
+            <input/>
+            <output/>
+        </operation>
+        <operation name="getUsers">
             <input/>
             <output/>
         </operation>

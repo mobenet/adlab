@@ -266,4 +266,21 @@ public class ImageWS {
         }
         return logged;
     }
+
+    /**
+     * Web service operation
+     * @return 
+     */
+    @WebMethod(operationName = "getUsers")
+    public List<String> getUsers() {
+        List<String> list = null;
+        try{
+            OurDao.startDB();
+            list = OurDao.getUsers();
+            OurDao.stopDB();
+        } catch(ClassNotFoundException | SQLException e){
+            System.err.println(e.getMessage());
+        }
+        return list;
+    }
 }

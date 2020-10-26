@@ -189,6 +189,16 @@ public class OurDao {
         return res;
     }
     
+    public static List<String> getUsers() throws SQLException {
+        if(connection == null) return null;
+        ResultSet rs = connection
+                .prepareStatement("select id_usuario from usuarios")
+                .executeQuery();
+        ArrayList<String> list = new ArrayList<>();
+        while(rs.next())list.add(rs.getString("id_usuario"));
+        return list;
+    }
+    
     protected static boolean validateUsername(String username){
         
         return username!=null 

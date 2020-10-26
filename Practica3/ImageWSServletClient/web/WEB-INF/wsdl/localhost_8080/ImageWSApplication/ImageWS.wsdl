@@ -7,53 +7,11 @@
 <xsd:import namespace="http://image.me.org/" schemaLocation="http://localhost:8080/ImageWSApplication/ImageWS?xsd=1"/>
 </xsd:schema>
 </types>
-<message name="SearchbyId">
-<part name="parameters" element="tns:SearchbyId"/>
+<message name="loginUser">
+<part name="parameters" element="tns:loginUser"/>
 </message>
-<message name="SearchbyIdResponse">
-<part name="parameters" element="tns:SearchbyIdResponse"/>
-</message>
-<message name="RegistrerImage">
-<part name="parameters" element="tns:RegistrerImage"/>
-</message>
-<message name="RegistrerImageResponse">
-<part name="parameters" element="tns:RegistrerImageResponse"/>
-</message>
-<message name="ModifyImage">
-<part name="parameters" element="tns:ModifyImage"/>
-</message>
-<message name="ModifyImageResponse">
-<part name="parameters" element="tns:ModifyImageResponse"/>
-</message>
-<message name="SearchbyTitle">
-<part name="parameters" element="tns:SearchbyTitle"/>
-</message>
-<message name="SearchbyTitleResponse">
-<part name="parameters" element="tns:SearchbyTitleResponse"/>
-</message>
-<message name="DeleteImage">
-<part name="parameters" element="tns:DeleteImage"/>
-</message>
-<message name="DeleteImageResponse">
-<part name="parameters" element="tns:DeleteImageResponse"/>
-</message>
-<message name="ListImages">
-<part name="parameters" element="tns:ListImages"/>
-</message>
-<message name="ListImagesResponse">
-<part name="parameters" element="tns:ListImagesResponse"/>
-</message>
-<message name="SearchbyKeywords">
-<part name="parameters" element="tns:SearchbyKeywords"/>
-</message>
-<message name="SearchbyKeywordsResponse">
-<part name="parameters" element="tns:SearchbyKeywordsResponse"/>
-</message>
-<message name="registerUser">
-<part name="parameters" element="tns:registerUser"/>
-</message>
-<message name="registerUserResponse">
-<part name="parameters" element="tns:registerUserResponse"/>
+<message name="loginUserResponse">
+<part name="parameters" element="tns:loginUserResponse"/>
 </message>
 <message name="SearchbyCreaDate">
 <part name="parameters" element="tns:SearchbyCreaDate"/>
@@ -61,11 +19,29 @@
 <message name="SearchbyCreaDateResponse">
 <part name="parameters" element="tns:SearchbyCreaDateResponse"/>
 </message>
-<message name="loginUser">
-<part name="parameters" element="tns:loginUser"/>
+<message name="ModifyImage">
+<part name="parameters" element="tns:ModifyImage"/>
 </message>
-<message name="loginUserResponse">
-<part name="parameters" element="tns:loginUserResponse"/>
+<message name="ModifyImageResponse">
+<part name="parameters" element="tns:ModifyImageResponse"/>
+</message>
+<message name="RegistrerImage">
+<part name="parameters" element="tns:RegistrerImage"/>
+</message>
+<message name="RegistrerImageResponse">
+<part name="parameters" element="tns:RegistrerImageResponse"/>
+</message>
+<message name="SearchbyKeywords">
+<part name="parameters" element="tns:SearchbyKeywords"/>
+</message>
+<message name="SearchbyKeywordsResponse">
+<part name="parameters" element="tns:SearchbyKeywordsResponse"/>
+</message>
+<message name="DeleteImage">
+<part name="parameters" element="tns:DeleteImage"/>
+</message>
+<message name="DeleteImageResponse">
+<part name="parameters" element="tns:DeleteImageResponse"/>
 </message>
 <message name="SearchbyAuthor">
 <part name="parameters" element="tns:SearchbyAuthor"/>
@@ -73,119 +49,90 @@
 <message name="SearchbyAuthorResponse">
 <part name="parameters" element="tns:SearchbyAuthorResponse"/>
 </message>
+<message name="registerUser">
+<part name="parameters" element="tns:registerUser"/>
+</message>
+<message name="registerUserResponse">
+<part name="parameters" element="tns:registerUserResponse"/>
+</message>
+<message name="SearchbyId">
+<part name="parameters" element="tns:SearchbyId"/>
+</message>
+<message name="SearchbyIdResponse">
+<part name="parameters" element="tns:SearchbyIdResponse"/>
+</message>
+<message name="SearchbyTitle">
+<part name="parameters" element="tns:SearchbyTitle"/>
+</message>
+<message name="SearchbyTitleResponse">
+<part name="parameters" element="tns:SearchbyTitleResponse"/>
+</message>
+<message name="ListImages">
+<part name="parameters" element="tns:ListImages"/>
+</message>
+<message name="ListImagesResponse">
+<part name="parameters" element="tns:ListImagesResponse"/>
+</message>
+<message name="getUsers">
+<part name="parameters" element="tns:getUsers"/>
+</message>
+<message name="getUsersResponse">
+<part name="parameters" element="tns:getUsersResponse"/>
+</message>
 <portType name="ImageWS">
-<operation name="SearchbyId">
-<input wsam:Action="http://image.me.org/ImageWS/SearchbyIdRequest" message="tns:SearchbyId"/>
-<output wsam:Action="http://image.me.org/ImageWS/SearchbyIdResponse" message="tns:SearchbyIdResponse"/>
-</operation>
-<operation name="RegistrerImage">
-<input wsam:Action="http://image.me.org/ImageWS/RegistrerImageRequest" message="tns:RegistrerImage"/>
-<output wsam:Action="http://image.me.org/ImageWS/RegistrerImageResponse" message="tns:RegistrerImageResponse"/>
-</operation>
-<operation name="ModifyImage">
-<input wsam:Action="http://image.me.org/ImageWS/ModifyImageRequest" message="tns:ModifyImage"/>
-<output wsam:Action="http://image.me.org/ImageWS/ModifyImageResponse" message="tns:ModifyImageResponse"/>
-</operation>
-<operation name="SearchbyTitle">
-<input wsam:Action="http://image.me.org/ImageWS/SearchbyTitleRequest" message="tns:SearchbyTitle"/>
-<output wsam:Action="http://image.me.org/ImageWS/SearchbyTitleResponse" message="tns:SearchbyTitleResponse"/>
-</operation>
-<operation name="DeleteImage">
-<input wsam:Action="http://image.me.org/ImageWS/DeleteImageRequest" message="tns:DeleteImage"/>
-<output wsam:Action="http://image.me.org/ImageWS/DeleteImageResponse" message="tns:DeleteImageResponse"/>
-</operation>
-<operation name="ListImages">
-<input wsam:Action="http://image.me.org/ImageWS/ListImagesRequest" message="tns:ListImages"/>
-<output wsam:Action="http://image.me.org/ImageWS/ListImagesResponse" message="tns:ListImagesResponse"/>
-</operation>
-<operation name="SearchbyKeywords">
-<input wsam:Action="http://image.me.org/ImageWS/SearchbyKeywordsRequest" message="tns:SearchbyKeywords"/>
-<output wsam:Action="http://image.me.org/ImageWS/SearchbyKeywordsResponse" message="tns:SearchbyKeywordsResponse"/>
-</operation>
-<operation name="registerUser">
-<input wsam:Action="http://image.me.org/ImageWS/registerUserRequest" message="tns:registerUser"/>
-<output wsam:Action="http://image.me.org/ImageWS/registerUserResponse" message="tns:registerUserResponse"/>
+<operation name="loginUser">
+<input wsam:Action="http://image.me.org/ImageWS/loginUserRequest" message="tns:loginUser"/>
+<output wsam:Action="http://image.me.org/ImageWS/loginUserResponse" message="tns:loginUserResponse"/>
 </operation>
 <operation name="SearchbyCreaDate">
 <input wsam:Action="http://image.me.org/ImageWS/SearchbyCreaDateRequest" message="tns:SearchbyCreaDate"/>
 <output wsam:Action="http://image.me.org/ImageWS/SearchbyCreaDateResponse" message="tns:SearchbyCreaDateResponse"/>
 </operation>
-<operation name="loginUser">
-<input wsam:Action="http://image.me.org/ImageWS/loginUserRequest" message="tns:loginUser"/>
-<output wsam:Action="http://image.me.org/ImageWS/loginUserResponse" message="tns:loginUserResponse"/>
+<operation name="ModifyImage">
+<input wsam:Action="http://image.me.org/ImageWS/ModifyImageRequest" message="tns:ModifyImage"/>
+<output wsam:Action="http://image.me.org/ImageWS/ModifyImageResponse" message="tns:ModifyImageResponse"/>
+</operation>
+<operation name="RegistrerImage">
+<input wsam:Action="http://image.me.org/ImageWS/RegistrerImageRequest" message="tns:RegistrerImage"/>
+<output wsam:Action="http://image.me.org/ImageWS/RegistrerImageResponse" message="tns:RegistrerImageResponse"/>
+</operation>
+<operation name="SearchbyKeywords">
+<input wsam:Action="http://image.me.org/ImageWS/SearchbyKeywordsRequest" message="tns:SearchbyKeywords"/>
+<output wsam:Action="http://image.me.org/ImageWS/SearchbyKeywordsResponse" message="tns:SearchbyKeywordsResponse"/>
+</operation>
+<operation name="DeleteImage">
+<input wsam:Action="http://image.me.org/ImageWS/DeleteImageRequest" message="tns:DeleteImage"/>
+<output wsam:Action="http://image.me.org/ImageWS/DeleteImageResponse" message="tns:DeleteImageResponse"/>
 </operation>
 <operation name="SearchbyAuthor">
 <input wsam:Action="http://image.me.org/ImageWS/SearchbyAuthorRequest" message="tns:SearchbyAuthor"/>
 <output wsam:Action="http://image.me.org/ImageWS/SearchbyAuthorResponse" message="tns:SearchbyAuthorResponse"/>
 </operation>
+<operation name="registerUser">
+<input wsam:Action="http://image.me.org/ImageWS/registerUserRequest" message="tns:registerUser"/>
+<output wsam:Action="http://image.me.org/ImageWS/registerUserResponse" message="tns:registerUserResponse"/>
+</operation>
+<operation name="SearchbyId">
+<input wsam:Action="http://image.me.org/ImageWS/SearchbyIdRequest" message="tns:SearchbyId"/>
+<output wsam:Action="http://image.me.org/ImageWS/SearchbyIdResponse" message="tns:SearchbyIdResponse"/>
+</operation>
+<operation name="SearchbyTitle">
+<input wsam:Action="http://image.me.org/ImageWS/SearchbyTitleRequest" message="tns:SearchbyTitle"/>
+<output wsam:Action="http://image.me.org/ImageWS/SearchbyTitleResponse" message="tns:SearchbyTitleResponse"/>
+</operation>
+<operation name="ListImages">
+<input wsam:Action="http://image.me.org/ImageWS/ListImagesRequest" message="tns:ListImages"/>
+<output wsam:Action="http://image.me.org/ImageWS/ListImagesResponse" message="tns:ListImagesResponse"/>
+</operation>
+<operation name="getUsers">
+<input wsam:Action="http://image.me.org/ImageWS/getUsersRequest" message="tns:getUsers"/>
+<output wsam:Action="http://image.me.org/ImageWS/getUsersResponse" message="tns:getUsersResponse"/>
+</operation>
 </portType>
 <binding name="ImageWSPortBinding" type="tns:ImageWS">
 <wsp:PolicyReference URI="#ImageWSPortBindingPolicy"/>
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-<operation name="SearchbyId">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="RegistrerImage">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="ModifyImage">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="SearchbyTitle">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="DeleteImage">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="ListImages">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="SearchbyKeywords">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="registerUser">
+<operation name="loginUser">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -203,7 +150,34 @@
 <soap:body use="literal"/>
 </output>
 </operation>
-<operation name="loginUser">
+<operation name="ModifyImage">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="RegistrerImage">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="SearchbyKeywords">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="DeleteImage">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -213,6 +187,51 @@
 </output>
 </operation>
 <operation name="SearchbyAuthor">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="registerUser">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="SearchbyId">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="SearchbyTitle">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="ListImages">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="getUsers">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
