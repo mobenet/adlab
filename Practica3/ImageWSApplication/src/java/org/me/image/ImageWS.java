@@ -6,14 +6,10 @@
 package org.me.image;
 
 import java.io.BufferedOutputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -23,7 +19,7 @@ import javax.xml.ws.soap.MTOM;
  *
  * @author Samuel
  */
-@MTOM
+@MTOM(threshold=2048)
 @WebService(serviceName = "ImageWS")
 public class ImageWS {
 

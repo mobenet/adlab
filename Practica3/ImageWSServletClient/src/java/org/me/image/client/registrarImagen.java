@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import javax.xml.ws.WebServiceRef;
 
 import java.util.logging.Level;
