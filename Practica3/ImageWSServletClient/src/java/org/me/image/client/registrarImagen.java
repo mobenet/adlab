@@ -13,12 +13,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDate;
 import javax.xml.ws.WebServiceRef;
 
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -84,18 +81,18 @@ public class registrarImagen extends HttpServlet {
             img.setTitle(request.getParameter("titulo"));
             img.setAuthor(request.getParameter("author"));
             img.setCreationDate(request.getParameter("fechaC"));
-            Date date = Calendar.getInstance().getTime();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd");
-            String fechaS = dateFormat.format(date);
-            img.setKeywords(fechaS);
+            img.setKeywords(request.getParameter("clave"));
             img.setDescription(request.getParameter("descripcion"));
             img.setFileName(fileName);
+            int id = registerImage(img);
+            //Temporal
+            if (!saveImage(filePart, id, fileName, path)) {
+                System.err.println("La imagen no se ha guardado correctamente");
+            }
+            out.println("<p>Se ha registrado la imagen exitosamente</p>");
             out.println("<a href=\"menu.jsp\">Vuelve al Menu</a>");
         }
-        int id = registerImage(img);
-        if (!saveImage(filePart, id, fileName, path)) {
-            System.err.println("La imagen no se ha guardado correctamente");
-        }
+
     }
 
     private boolean saveImage(Part image, int imageId, String filename, String path) throws IOException {

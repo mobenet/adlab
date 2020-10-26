@@ -6,10 +6,7 @@
 package org.me.image;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
@@ -44,15 +41,23 @@ public class ImageWS {
         final String path = basepath + "adlab/web/images";
         //OutputStream outta = null;
         //InputStream filecontent = null;
-        Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd");
-        String fechaS = dateFormat.format(date);
+        image.setStorageDate(LocalDate.now().toString()); //.format(DateTimeFormatter.ofPattern("yyy-MM-dd"));
 
         try {
 
             OurDao.startDB();
 
-            image.setId(OurDao.enregistrar(image.getTitle(), image.getDescription(), image.getKeywords(), image.getAuthor(), image.getCreationDate(), fechaS, image.getFileName()));
+            image.setId(
+                    OurDao.enregistrar(
+                            image.getTitle(), 
+                            image.getDescription(), 
+                            image.getKeywords(), 
+                            image.getAuthor(), 
+                            image.getCreationDate(), 
+                            image.getStorageDate(), 
+                            image.getFileName()
+                    )
+            );
 
             /*outta = new FileOutputStream(new File(path + File.separator + selectImage.getImageName(id, fileName)));
             /filecontent = filePart.getInputStream();
@@ -116,7 +121,7 @@ public class ImageWS {
             int id = image.getId();
             boolean ok = OurDao.enregistrarCanvi(title, desc, key, data, filename, id);
             OurDao.stopDB();
-        } catch (ClassNotFoundException | SQLException e){
+        } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e.getMessage());
         }
         return 0;
@@ -130,9 +135,9 @@ public class ImageWS {
      */
     @WebMethod(operationName = "DeleteImage")
     public int DeleteImage(@WebParam(name = "image") Image image) {
-        try{
+        try {
             OurDao.startDB();
-            int id = image.getId(); 
+            int id = image.getId();
             boolean res = OurDao.eliminar(id);
             OurDao.stopDB();
         } catch (ClassNotFoundException | SQLException e) {
@@ -269,16 +274,17 @@ public class ImageWS {
 
     /**
      * Web service operation
-     * @return 
+     *
+     * @return
      */
     @WebMethod(operationName = "getUsers")
     public List<String> getUsers() {
         List<String> list = null;
-        try{
+        try {
             OurDao.startDB();
             list = OurDao.getUsers();
             OurDao.stopDB();
-        } catch(ClassNotFoundException | SQLException e){
+        } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e.getMessage());
         }
         return list;

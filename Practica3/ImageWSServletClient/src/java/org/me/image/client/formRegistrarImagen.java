@@ -55,7 +55,7 @@ public class formRegistrarImagen extends HttpServlet {
                 out.println("<option value=\""+autor+"\">"+autor+"</option>");
             }
             out.println("</select> <br> <br>"
-                    + "Fecha creación: <input type=\"text\" name = \"fechaC\" required /> <br> <br>"
+                    + "Fecha creación: <input type=date name = \"fechaC\" required /> <br> <br>"
                     + " Archivo: <input   type = \"file\" name = \"imagen\" /> <br> <br>"
                     + "<input type = \"submit\" name = \"submit\" value = \"Registrar\" /> </form> <br> <br>"
                     + "<a href = \"menu.jsp\"> Vuelve al Menú</a>");

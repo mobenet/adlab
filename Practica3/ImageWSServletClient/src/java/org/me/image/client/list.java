@@ -48,7 +48,7 @@ public class list extends HttpServlet {
                 response.sendRedirect("login.jsp");
             } else {
                 try {
-                    out.println("<table>"
+                    out.println("<table border=1>"
                             + "<tr>"
                             + "<th>Titulo</th>"
                             + "<th>Descripcion</th>"

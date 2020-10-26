@@ -1,7 +1,15 @@
-/nbproject/private/
-/Practica3/ImageWS_Cient_Application/nbproject/private/
-/Practica3/ImageWS_Cient_Application/build/
-/Practica3/ImageWS_Client_Application/nbproject/private/
-/Practica3/ImageWS_Client_Application/build/
-/Practica3/ImageWSServletClient/nbproject/private/
-/Practica3/ImageWSServletClient/build/
+**/nbproject/private/
+**/nbbuild
+**/dist
+**/nbdist
+**/build/web
+nbactions.xml
+nb-configuration.xml
+
+*.jpg
+*.png
+# default exclude
+*.jar
+*.class
+*.war
+*.ear
