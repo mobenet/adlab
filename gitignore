@@ -1,0 +1,15 @@
+**/nbproject/private/
+**/nbbuild
+**/dist
+**/nbdist
+**/build/web
+nbactions.xml
+nb-configuration.xml
+
+*.jpg
+*.png
+# default exclude
+*.jar
+*.class
+*.war
+*.ear

@@ -119,44 +119,48 @@ public class OurDao {
     }
     
     //public static ArrayList<String> consultar(HashMap<String, String> palabra) throws SQLException{
-    public static ResultSet consultar(HashMap<String, String> palabra) throws SQLException{
-        PreparedStatement statement;
-        ResultSet rs;
-        String[] aux = {""};
-        String query2 = "SELECT * FROM IMAGE WHERE ID is null";
-        palabra.forEach((String k, String v) -> {
-            boolean b = false;
-            String query = "";
-            switch (k){
+    public static ResultSet consultar(HashMap<String, String> consultas) throws SQLException{
+        String query = "SELECT * FROM IMAGE WHERE ";
+        for (String c : consultas.keySet()) {
+            switch (c) {
+                case "id":
+                    query += "ID = ?";
+                    PreparedStatement statement = connection.prepareStatement(query);
+                    statement.setInt(1, Integer.parseInt(consultas.get("id")));
+                    return statement.executeQuery();
                 case "title":
-                    query    += " OR TITLE LIKE '"+v+"'";
+                    query += "TITLE LIKE ? OR ";
                     break;
                 case "descrpition":
-                    query += " OR DESCRIPTION LIKE '"+v+"'";
+                    query += "DESCRIPTION LIKE ? OR ";
                     break;
                 case "keywords":
-                    query += " OR KEYWORDS LIKE '"+v+"'";
+                    query += "KEYWORDS LIKE ? OR ";
                     break;
                 case "author":
-                    query += " OR AUTHOR LIKE '"+v+"'";
-                    break; 
+                    query += "AUTHOR LIKE ? OR ";
+                    break;
                 case "cdate":
-                    query += " OR CREATION_DATE LIKE '"+v+"'";
+                    query += "CREATION_DATE LIKE ? OR ";
                     break;
                 case "filename":
-                    query += " OR FILENAME LIKE '"+v+"'";
+                    query += "FILENAME LIKE ? OR ";
                     break;
-                default:                     
-                    query+="";
+                default:
+                    return null;
             }
-            
-            aux[0] += query;
-            
-        });
-            statement = connection.prepareStatement(query2+aux[0]);
-            rs = statement.executeQuery();
-            return rs;
+            query = query.substring(0, query.length() - 3);
+        }
+        PreparedStatement statement = connection.prepareStatement(query);
+        int i = 1;
+        for(String v: consultas.values()){
+            statement.setString(i, v);
+            i++;
+        }
+        return statement.executeQuery();
     }
+    
+
     
      public static List<Image> getAllImages() throws SQLException {
         
@@ -177,16 +181,6 @@ public class OurDao {
             ));
         }
         return list;
-    }
-    public static ResultSet getImage(int id) throws SQLException {
-        
-        if(connection == null) return null; //No se ha iniciado la conexión
-        PreparedStatement st; 
-        String query = "select * from image where id =?";
-        st = connection.prepareStatement(query);
-        st.setInt(1, id);
-        ResultSet res = st.executeQuery();
-        return res;
     }
     
     public static List<String> getUsers() throws SQLException {

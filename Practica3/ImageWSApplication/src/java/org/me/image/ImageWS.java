@@ -5,12 +5,18 @@
  */
 package org.me.image;
 
+import java.io.IOException;
+import static java.lang.System.out;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -166,10 +172,55 @@ public class ImageWS {
      * @param id
      * @return
      */
-    @WebMethod(operationName = "SearchbyId")
-    public Image SearchbyId(@WebParam(name = "id") int id) {
-        //TODO write your implementation code here:
-        return null;
+   @WebMethod(operationName = "SearchbyId")
+    public Image SearchbyId(@WebParam(name = "id") int id
+    ) {
+        Image tmp = new Image();//cambiar
+        try {
+            //TODO write your implementation code here:
+            HashMap<String, String> map = new HashMap<>();
+            map.put("id", String.valueOf(id));//controlar el sql injection
+            OurDao.startDB(); // els stopDB shan de posar? 
+            ResultSet res;
+            res = OurDao.consultar(map);
+            if(res==null)return null;
+            if (res.next()) {
+                tmp.setId(res.getInt("ID"));
+                tmp.setTitle(res.getString("TITLE"));
+                tmp.setAuthor(res.getString("AUTHOR"));
+                tmp.setDescription(res.getString("DESCRIPTION"));
+                tmp.setKeywords(res.getString("KEYWORDS"));
+                tmp.setCreationDate(res.getString("CREATION_DATE"));
+                tmp.setStorageDate(res.getString("STORAGE_DATE"));
+                tmp.setFileName(res.getString("FILENAME"));
+            }
+            OurDao.stopDB();
+
+           /* //Leer imagen del sistema de ficheros
+            String basepath = ImageWS.class
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath();
+            String projectName = "ImageWSApplication";
+            basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
+            final String path = basepath + projectName + "/web/images/";
+            File imageFile = new File(path + tmp.getImageName());
+            FileInputStream fis = new FileInputStream(imageFile);
+            byte[] imageBytes;
+            try (BufferedInputStream inStream = new BufferedInputStream(fis)) {
+                imageBytes = new byte[(int) imageFile.length()];
+                inStream.read(imageBytes);
+            }
+            tmp.setBytes(imageBytes);
+
+        */} catch (ClassNotFoundException | SQLException ex) {
+            System.err.println(ex.getMessage());
+            return null;
+        }
+        //q pasa si la imagen es vacia
+        
+        return tmp;
     }
 
     /**

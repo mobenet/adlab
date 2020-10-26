@@ -4,7 +4,12 @@
     Author     : mo
 --%>
 
+<%@page import="java.net.URL"%>
+<%@page import="org.me.image.ImageWS_Service"%>
+<%@page import="java.util.List"%>
+<%@page import="org.me.image.Image"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 
 <html>
@@ -18,8 +23,53 @@
             String user = (String) ses.getAttribute("user");
             if(user == null) {
                 response.sendRedirect("login.jsp");
-            }
+            } else {
+                try {
         %>
+        <table>
+            <tr>
+                <th>Titulo</th>
+                <th>Descripcion</th>
+                <th>Palabras Clave</th>
+                <th>Autor</th>
+                <th>Fecha de creacion</th>
+                <th>Fecha de subida</th>
+                <th>Nombre del archivo</th>
+            </tr>
+            <%
+               org.me.image.ImageWS_Service service = new org.me.image.ImageWS_Service();
+               org.me.image.ImageWS port = service.getImageWSPort();
+               int id = Integer.parseInt(ses.getAttribute("imageid").toString()); 
+               Image img = port.searchbyId(id);
+               
+            %>
+            <tr>
+                <td><%  out.println(img.getTitle());%></td>
+                <td><%  out.println(img.getDescription());%></td>
+                <td><%  out.println(img.getKeywords());%></td>
+                <td><%
+                    String autor = img.getAuthor();
+                    out.println(autor);
+                    %></td>
+                <td><%  out.println(img.getCreationDate());%></td>
+                <td><%  out.println(img.getStorageDate());%></td>
+                <%
+                    String filename = img.getFileName();
+                %>
+                <td>
+                    <%
+                        out.println("<a href=image.jsp?name=" + filename + "&id=" + id + ">" + filename + "</a>");
+                    %>
+                </td>
+            </tr><%          
+                            
+                        } catch (Exception e) {
+                            System.err.println(e.getMessage());
+                        }
+                    }
+                }
+            %>
+        </table><br><br>
         
         <h2>Escribe todos los valores, tanto los que quieras modificar com los que no</h2>  
         <form method="POST" action="modificarImagen">
@@ -36,5 +86,6 @@
             <input type="submit" name="submit" value="Modifcar">
         </form>
         <br><br><a href="menu.jsp">Vuelve al Menú</a>
+   
     </body>
 </html>
