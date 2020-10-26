@@ -19,8 +19,10 @@ public class Image {
     private String creationDate;
     private String storageDate;
     private String fileName;
+    private byte[] bytes;
 
-    public Image(){}
+    public Image() {
+    }
 
     public Image(int id, String title, String author, String description, String keywords, String creationDate, String storageDate, String fileName) {
         this.id = id;
@@ -43,13 +45,21 @@ public class Image {
         this.fileName = fileName;
     }
 
+    public byte[] getBytes() {
+        return bytes;
+    }
+
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
+    }
+
     public String getStorageDate() {
         return storageDate;
     }
 
     public void setStorageDate(String storageDate) {
         this.storageDate = storageDate;
-    }    
+    }
 
     public int getId() {
         return id;
@@ -105,5 +115,18 @@ public class Image {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getImageName() {
+
+        if (fileName == null || fileName.isEmpty()) {
+            return null;
+        }
+        String[] splitted = fileName.split("\\.");
+        if (splitted.length != 2) {
+            System.err.println("Nombre de archivo incompatible: " + fileName + " Tamaño: " + splitted.length);
+            return null;
+        }
+        return splitted[0] + Integer.toString(id) + '.' + splitted[1];
     }
 }

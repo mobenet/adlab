@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import javax.xml.ws.soap.MTOMFeature;
 
 import org.me.image.ImageWS_Service;
 import org.me.image.Image;
@@ -192,8 +193,7 @@ public class registrarImagen extends HttpServlet {
     private int registerImage(org.me.image.Image image) {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
-        org.me.image.ImageWS port = service.getImageWSPort();
+        org.me.image.ImageWS port = service.getImageWSPort(new MTOMFeature());
         return port.registrerImage(image);
     }
-
 }

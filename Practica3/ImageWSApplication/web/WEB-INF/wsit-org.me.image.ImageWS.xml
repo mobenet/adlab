@@ -3,48 +3,48 @@
  xmlns="http://schemas.xmlsoap.org/wsdl/" 
  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
- xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="ImageWS" targetNamespace="http://image.me.org/" xmlns:tns="http://image.me.org/" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" 
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="ImageWS" targetNamespace="http://image.me.org/" xmlns:tns="http://image.me.org/" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702" 
  >
     <message name="RegistrerImage"/>
     <message name="RegistrerImageResponse"/>
-    <message name="ModifyImage"/>
-    <message name="ModifyImageResponse"/>
+    <message name="SearchbyKeywords"/>
+    <message name="SearchbyKeywordsResponse"/>
     <message name="DeleteImage"/>
     <message name="DeleteImageResponse"/>
-    <message name="ListImages"/>
-    <message name="ListImagesResponse"/>
+    <message name="loginUser"/>
+    <message name="loginUserResponse"/>
     <message name="SearchbyId"/>
     <message name="SearchbyIdResponse"/>
     <message name="SearchbyTitle"/>
     <message name="SearchbyTitleResponse"/>
-    <message name="SearchbyCreaDate"/>
-    <message name="SearchbyCreaDateResponse"/>
     <message name="SearchbyAuthor"/>
     <message name="SearchbyAuthorResponse"/>
-    <message name="SearchbyKeywords"/>
-    <message name="SearchbyKeywordsResponse"/>
-    <message name="registerUser"/>
-    <message name="registerUserResponse"/>
-    <message name="loginUser"/>
-    <message name="loginUserResponse"/>
     <message name="getUsers"/>
     <message name="getUsersResponse"/>
+    <message name="ModifyImage"/>
+    <message name="ModifyImageResponse"/>
+    <message name="registerUser"/>
+    <message name="registerUserResponse"/>
+    <message name="SearchbyCreaDate"/>
+    <message name="SearchbyCreaDateResponse"/>
+    <message name="ListImages"/>
+    <message name="ListImagesResponse"/>
     <portType name="ImageWS">
         <operation name="RegistrerImage">
             <input message="tns:RegistrerImage"/>
             <output message="tns:RegistrerImageResponse"/>
         </operation>
-        <operation name="ModifyImage">
-            <input message="tns:ModifyImage"/>
-            <output message="tns:ModifyImageResponse"/>
+        <operation name="SearchbyKeywords">
+            <input message="tns:SearchbyKeywords"/>
+            <output message="tns:SearchbyKeywordsResponse"/>
         </operation>
         <operation name="DeleteImage">
             <input message="tns:DeleteImage"/>
             <output message="tns:DeleteImageResponse"/>
         </operation>
-        <operation name="ListImages">
-            <input message="tns:ListImages"/>
-            <output message="tns:ListImagesResponse"/>
+        <operation name="loginUser">
+            <input message="tns:loginUser"/>
+            <output message="tns:loginUserResponse"/>
         </operation>
         <operation name="SearchbyId">
             <input message="tns:SearchbyId"/>
@@ -54,29 +54,29 @@
             <input message="tns:SearchbyTitle"/>
             <output message="tns:SearchbyTitleResponse"/>
         </operation>
-        <operation name="SearchbyCreaDate">
-            <input message="tns:SearchbyCreaDate"/>
-            <output message="tns:SearchbyCreaDateResponse"/>
-        </operation>
         <operation name="SearchbyAuthor">
             <input message="tns:SearchbyAuthor"/>
             <output message="tns:SearchbyAuthorResponse"/>
         </operation>
-        <operation name="SearchbyKeywords">
-            <input message="tns:SearchbyKeywords"/>
-            <output message="tns:SearchbyKeywordsResponse"/>
+        <operation name="getUsers">
+            <input message="tns:getUsers"/>
+            <output message="tns:getUsersResponse"/>
+        </operation>
+        <operation name="ModifyImage">
+            <input message="tns:ModifyImage"/>
+            <output message="tns:ModifyImageResponse"/>
         </operation>
         <operation name="registerUser">
             <input message="tns:registerUser"/>
             <output message="tns:registerUserResponse"/>
         </operation>
-        <operation name="loginUser">
-            <input message="tns:loginUser"/>
-            <output message="tns:loginUserResponse"/>
+        <operation name="SearchbyCreaDate">
+            <input message="tns:SearchbyCreaDate"/>
+            <output message="tns:SearchbyCreaDateResponse"/>
         </operation>
-        <operation name="getUsers">
-            <input message="tns:getUsers"/>
-            <output message="tns:getUsersResponse"/>
+        <operation name="ListImages">
+            <input message="tns:ListImages"/>
+            <output message="tns:ListImagesResponse"/>
         </operation>
     </portType>
     <binding name="ImageWSPortBinding" type="tns:ImageWS">
@@ -85,7 +85,7 @@
             <input/>
             <output/>
         </operation>
-        <operation name="ModifyImage">
+        <operation name="SearchbyKeywords">
             <input/>
             <output/>
         </operation>
@@ -93,7 +93,7 @@
             <input/>
             <output/>
         </operation>
-        <operation name="ListImages">
+        <operation name="loginUser">
             <input/>
             <output/>
         </operation>
@@ -105,15 +105,15 @@
             <input/>
             <output/>
         </operation>
-        <operation name="SearchbyCreaDate">
-            <input/>
-            <output/>
-        </operation>
         <operation name="SearchbyAuthor">
             <input/>
             <output/>
         </operation>
-        <operation name="SearchbyKeywords">
+        <operation name="getUsers">
+            <input/>
+            <output/>
+        </operation>
+        <operation name="ModifyImage">
             <input/>
             <output/>
         </operation>
@@ -121,11 +121,11 @@
             <input/>
             <output/>
         </operation>
-        <operation name="loginUser">
+        <operation name="SearchbyCreaDate">
             <input/>
             <output/>
         </operation>
-        <operation name="getUsers">
+        <operation name="ListImages">
             <input/>
             <output/>
         </operation>
@@ -137,6 +137,270 @@
         <wsp:ExactlyOne>
             <wsp:All>
                 <wsoma:OptimizedMimeSerialization/>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_SearchbyKeywords_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_SearchbyKeywords_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_DeleteImage_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_DeleteImage_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_loginUser_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_loginUser_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_SearchbyId_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_SearchbyId_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_SearchbyTitle_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_SearchbyTitle_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_SearchbyAuthor_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_SearchbyAuthor_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_getUsers_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_getUsers_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_ModifyImage_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_ModifyImage_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_registerUser_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_registerUser_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_SearchbyCreaDate_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_SearchbyCreaDate_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_ListImages_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ImageWSPortBinding_ListImages_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                </sp:SignedParts>
             </wsp:All>
         </wsp:ExactlyOne>
     </wsp:Policy>
