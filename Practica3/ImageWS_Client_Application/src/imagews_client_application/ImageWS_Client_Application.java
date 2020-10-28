@@ -77,7 +77,7 @@ public class ImageWS_Client_Application {
                             if (a.equals(".")) break;
                             else ar.add(a);
                         }
-                        sca.close();
+                        //sca.close();
                         Iterator<String> it2 = ar.iterator();
                         it2 = ar.iterator();          
                         List<List<Object>> colores;
@@ -114,7 +114,7 @@ public class ImageWS_Client_Application {
                                     break; 
                             }
                         }
-                        p.close();
+                        //p.close();
                         
                         HashMap<Integer, Image> map = new HashMap<>();
                         Iterator<List<Object>> iter = colores.iterator();
@@ -157,7 +157,7 @@ public class ImageWS_Client_Application {
             catch (InputMismatchException ime){
                     System.out.println("¡Cuidado! Solo puedes insertar números del 1 al 5. ");
             }
-            sc.close();
+            //sc.close();
             
         }
 
