@@ -1,0 +1,30 @@
+<%-- 
+    Document   : index
+    Created on : 30-sep-2020, 16:42:21
+    Author     : mo
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page errorPage="error.jsp"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Login</title>
+    </head>
+    <body>
+        <%
+            HttpSession ses = request.getSession(false);
+            if (ses.getAttribute("user") != null) {
+                response.sendRedirect("menu.jsp");
+            }
+        %>
+        <h1>Hola! Accede a tu cuenta</h1>
+        <form action="RestAD/webresources/generic/searchTitle/aefaef" method="GET">
+
+            <input type="Submit"   value="Acceder"/><br>
+            <br><br>
+            <a href="registroUsuarios.jsp">Registrate aqui</a><br><br>
+        </form>
+    </body>
+</html>
