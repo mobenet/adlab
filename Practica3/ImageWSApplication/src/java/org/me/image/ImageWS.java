@@ -11,12 +11,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -123,7 +130,29 @@ public class ImageWS {
             OurDao.startDB();
             int id = image.getId();
             boolean res = OurDao.eliminar(id);
-            OurDao.stopDB();
+            OurDao.stopDB();                      
+            String basepath = ImageWS.class
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath();
+            String projectName = "ImageWSApplication";
+            basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
+
+            basepath = basepath.substring(1);
+            
+            String path = basepath + projectName + "/web/images/";
+            
+            
+            Path imagesPath = Paths.get(path+image.getFileName());
+            try {
+                Files.delete(imagesPath);
+                
+            } catch (IOException ex) {
+                Logger.getLogger(ImageWS.class.getName()).log(Level.SEVERE, null, ex);
+                
+            }
+            
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e.getMessage());
         }

@@ -42,7 +42,7 @@ public class selectImage extends HttpServlet {
             ses.setAttribute("imageName", request.getParameter("name"));
             String action = request.getParameter("action");
             if ("Modificar".equals(action)) {
-                response.sendRedirect("modificarImagen.jsp");
+                response.sendRedirect("formModificarImagen");
             } else if ("Eliminar".equals(action)) {
                 response.sendRedirect("eliminarImagen.jsp");
             } else {
