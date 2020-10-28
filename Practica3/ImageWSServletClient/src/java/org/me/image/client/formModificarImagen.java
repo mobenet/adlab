@@ -78,18 +78,27 @@ public class formModificarImagen extends HttpServlet {
                
                     String autor = img.getAuthor();
                     String fStorage = img.getStorageDate(); 
+                    String fileN = img.getFileName();
+                    String title = img.getTitle();
+                    String desc = img.getDescription();
+                    String key = img.getKeywords(); 
+                    String crea = img.getCreationDate();
                     ses.setAttribute("autor", autor);
                     ses.setAttribute("fStorage", fStorage);
-                    
-                    out.println("<h1>Inserta tu imagen en nuestra Base de datos</h1>"
+                    ses.setAttribute("fileN", fileN);
+                    ses.setAttribute("title", title);
+                    ses.setAttribute("desc", desc);
+                    ses.setAttribute("crea", crea);
+                    ses.setAttribute("key", key);
+                    out.println("<h1>Modifica tu imagen como desees</h1>"
                     + "<form method=\"POST\" action = \"modificarImagen\">"
-                    + "Titulo: <input type = \"text\" name = \"titulo\" required /> <br> <br>"
-                    + "Descripción: <input type = \"text\" name = \"descripcion\" required /> <br> <br>"
-                    + "Palabras clave: <input type=\"text\" name = \"clave\" required /> <br> <br>"
-                    + "Fecha creación: <input type=\"text\" name = \"fechaC\" required /> <br> <br>"
+                    + "Titulo: <input type = \"text\" name = \"titulo\"  /> <br> <br>"
+                    + "Descripción: <input type = \"text\" name = \"descripcion\"  /> <br> <br>"
+                    + "Palabras clave: <input type=\"text\" name = \"clave\"  /> <br> <br>"
+                    + "Fecha creación: <input type=\"text\" name = \"fechaC\"  /> <br> <br>"
                     + "Autor: "+autor+"<br><br>"      
                     + "Fecha guardado: " + fStorage +" <br> <br>"
-                    + "Nombre archivo: <input type=\"text\" name = \"filename\" required /> <br><br>"
+                    + "Nombre archivo: " + fileN + " <br><br>"
                     + "<input type = \"submit\" name = \"submit\" value = \"Modificar\" /> </form> <br> <br>"
                     + "<a href = \"menu.jsp\"> Vuelve al Menú</a>");
                     

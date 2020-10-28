@@ -7,6 +7,7 @@ package org.me.image.client;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.System.out;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,19 +44,41 @@ public class modificarImagen extends HttpServlet {
         else {
             String autor = (String) ses.getAttribute("autor");
             String fStorage = (String) ses.getAttribute("fStorage");
+            String fileN = (String) ses.getAttribute("fileN");
+            String title = (String) ses.getAttribute("title");
+            String desc = (String) ses.getAttribute("desc");
+            String crea = (String) ses.getAttribute("crea");
+            String key = (String) ses.getAttribute("key");
             int id = Integer.parseInt(ses.getAttribute("imageId").toString()); 
 
+            
             response.setContentType("text/html;charset=UTF-8");
             try (PrintWriter out = response.getWriter()) {
                 Image img = new Image();
                 img.setId(id);
-                img.setTitle(request.getParameter("titulo"));
-                img.setDescription(request.getParameter("descripcion"));
-                img.setKeywords(request.getParameter("clave"));
+     
+                
+                if ("".equals(request.getParameter("titulo"))) {
+                    img.setTitle(title);
+                }
+                else img.setTitle(request.getParameter("titulo"));
+                
+                
+                if ("".equals(request.getParameter("descripcion")))
+                    img.setDescription(desc);
+                else img.setDescription(request.getParameter("descripcion"));
+                
+                if ("".equals(request.getParameter("clave")))
+                    img.setKeywords(key);
+                else img.setKeywords(request.getParameter("clave"));
+                
+                if ("".equals(request.getParameter("fechaC")))
+                    img.setCreationDate(crea);
+                else img.setCreationDate(request.getParameter("fechaC"));
+                
                 img.setAuthor(autor);
-                img.setStorageDate(fStorage);
-                img.setCreationDate(request.getParameter("fechaC"));
-                img.setFileName(request.getParameter("filename"));
+                img.setStorageDate(fStorage);                
+                img.setFileName(fileN);
                 
                 int idI = modifyImage(img);
                 out.println("<p>Se ha modificado la imagen exitosamente</p>");

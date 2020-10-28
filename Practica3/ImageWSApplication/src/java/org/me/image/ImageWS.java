@@ -130,7 +130,7 @@ public class ImageWS {
             OurDao.startDB();
             int id = image.getId();
             boolean res = OurDao.eliminar(id);
-            OurDao.stopDB();                      
+            OurDao.stopDB();
             String basepath = ImageWS.class
                     .getProtectionDomain()
                     .getCodeSource()
@@ -138,21 +138,16 @@ public class ImageWS {
                     .getPath();
             String projectName = "ImageWSApplication";
             basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
+            System.err.println(basepath);
+            Logger.getLogger(ImageWS.class.getName()).log(Level.SEVERE,basepath);
 
-            basepath = basepath.substring(1);
-            
+            //basepath = basepath.substring(1);
+
             String path = basepath + projectName + "/web/images/";
-            
-            
-            Path imagesPath = Paths.get(path+image.getFileName());
-            try {
-                Files.delete(imagesPath);
-                
-            } catch (IOException ex) {
-                Logger.getLogger(ImageWS.class.getName()).log(Level.SEVERE, null, ex);
-                
-            }
-            
+
+            //Path imagesPath = Paths.get(path + image.getImageName());
+            (new File(path+image.getImageName())).delete();
+
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e.getMessage());
         }
@@ -195,7 +190,9 @@ public class ImageWS {
             OurDao.startDB(); // els stopDB shan de posar? 
             ResultSet res;
             res = OurDao.consultar(map);
-            if(res==null)return null;
+            if (res == null) {
+                return null;
+            }
             if (res.next()) {
                 tmp.setId(res.getInt("ID"));
                 tmp.setTitle(res.getString("TITLE"));
