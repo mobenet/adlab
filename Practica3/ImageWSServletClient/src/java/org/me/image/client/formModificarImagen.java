@@ -48,7 +48,7 @@ public class formModificarImagen extends HttpServlet {
                 response.sendRedirect("login.jsp");
             } else {
                 try {
-                    out.println("<table>"
+                    out.println("<table border=1>"
                             + "<tr>"
                             + "<th>Titulo</th>"
                             + "<th>Descripcion</th>"
@@ -95,7 +95,7 @@ public class formModificarImagen extends HttpServlet {
                     + "Titulo: <input type = \"text\" name = \"titulo\"  /> <br> <br>"
                     + "Descripción: <input type = \"text\" name = \"descripcion\"  /> <br> <br>"
                     + "Palabras clave: <input type=\"text\" name = \"clave\"  /> <br> <br>"
-                    + "Fecha creación: <input type=\"text\" name = \"fechaC\"  /> <br> <br>"
+                    + "Fecha creación: <input type=date name = \"fechaC\"  /> <br> <br>"
                     + "Autor: "+autor+"<br><br>"      
                     + "Fecha guardado: " + fStorage +" <br> <br>"
                     + "Nombre archivo: " + fileN + " <br><br>"

@@ -12,10 +12,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import java.nio.file.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -140,12 +136,7 @@ public class ImageWS {
             basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
             System.err.println(basepath);
             Logger.getLogger(ImageWS.class.getName()).log(Level.SEVERE,basepath);
-
-            //basepath = basepath.substring(1);
-
             String path = basepath + projectName + "/web/images/";
-
-            //Path imagesPath = Paths.get(path + image.getImageName());
             (new File(path+image.getImageName())).delete();
 
         } catch (ClassNotFoundException | SQLException e) {

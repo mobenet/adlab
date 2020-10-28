@@ -39,13 +39,9 @@
             outo.write("<html><head><title>Exception/errors</title></head><body>");
             outo.write("<h3>Oops!</h3>");
             if (statusCode != 500) {
-                outo.write("<p>Se ha generado un error</p>");
                 outo.write("<strong>Requested URI</strong>: " + requestUri);
             } else {
-                outo.write("<p>Se ha generado la siguiente excepción: </p>");
-                outo.write("<p>Mensaje excepción: " + throwable.getMessage() + "</p>");
-                outo.write("<p>Nombre Servlet: " + servletName + "</p>");
-                outo.write("<p>Requested URI: " + requestUri + "</p>");
+                outo.write("<p>"+ throwable.getMessage() + "</p>");
             }
 
             outo.write("<br><br>");
