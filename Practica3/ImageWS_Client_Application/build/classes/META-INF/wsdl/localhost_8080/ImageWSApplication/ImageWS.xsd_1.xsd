@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.2-b608 (trunk-7979; 2015-01-21T12:50:19+0000) JAXWS-RI/2.2.11-b150120.1832 JAXWS-API/2.2.12 JAXB-RI/2.2.12-b141219.1637 JAXB-API/2.2.13-b141020.1521 svn-revision#unknown. --><xs:schema xmlns:tns="http://image.me.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://image.me.org/">
+
+<xs:element name="DeleteImage" type="tns:DeleteImage"/>
+
+<xs:element name="DeleteImageResponse" type="tns:DeleteImageResponse"/>
+
+<xs:element name="ListImages" type="tns:ListImages"/>
+
+<xs:element name="ListImagesResponse" type="tns:ListImagesResponse"/>
+
+<xs:element name="ModifyImage" type="tns:ModifyImage"/>
+
+<xs:element name="ModifyImageResponse" type="tns:ModifyImageResponse"/>
+
+<xs:element name="RegistrerImage" type="tns:RegistrerImage"/>
+
+<xs:element name="RegistrerImageResponse" type="tns:RegistrerImageResponse"/>
+
+<xs:element name="SearchbyAuthor" type="tns:SearchbyAuthor"/>
+
+<xs:element name="SearchbyAuthorResponse" type="tns:SearchbyAuthorResponse"/>
+
+<xs:element name="SearchbyCreaDate" type="tns:SearchbyCreaDate"/>
+
+<xs:element name="SearchbyCreaDateResponse" type="tns:SearchbyCreaDateResponse"/>
+
+<xs:element name="SearchbyKeywords" type="tns:SearchbyKeywords"/>
+
+<xs:element name="SearchbyKeywordsResponse" type="tns:SearchbyKeywordsResponse"/>
+
+<xs:element name="SearchbyTitle" type="tns:SearchbyTitle"/>
+
+<xs:element name="SearchbyTitleResponse" type="tns:SearchbyTitleResponse"/>
+
+<xs:complexType name="ListImages">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="ListImagesResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:anyType" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SearchbyCreaDate">
+<xs:sequence>
+<xs:element name="creaDate" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SearchbyCreaDateResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:anyType" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="RegistrerImage">
+<xs:sequence>
+<xs:element name="image" type="tns:image" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="image">
+<xs:sequence>
+<xs:element name="author" type="xs:string" minOccurs="0"/>
+<xs:element name="creationDate" type="xs:string" minOccurs="0"/>
+<xs:element name="description" type="xs:string" minOccurs="0"/>
+<xs:element name="fileName" type="xs:string" minOccurs="0"/>
+<xs:element name="id" type="xs:int"/>
+<xs:element name="keywords" type="xs:string" minOccurs="0"/>
+<xs:element name="storageDate" type="xs:string" minOccurs="0"/>
+<xs:element name="title" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="RegistrerImageResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="DeleteImage">
+<xs:sequence>
+<xs:element name="image" type="tns:image" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="DeleteImageResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SearchbyKeywords">
+<xs:sequence>
+<xs:element name="keywords" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SearchbyKeywordsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:anyType" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ModifyImage">
+<xs:sequence>
+<xs:element name="image" type="tns:image" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ModifyImageResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SearchbyAuthor">
+<xs:sequence>
+<xs:element name="author" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SearchbyAuthorResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:anyType" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SearchbyTitle">
+<xs:sequence>
+<xs:element name="title" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SearchbyTitleResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:anyType" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

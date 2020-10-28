@@ -35,7 +35,6 @@ public class ImageWS_Client_Application {
             Scanner sc = new Scanner(System.in);
             try  {            
                 int in = sc.nextInt();
-               
                 sc.nextLine();
                 switch (in) {
 
@@ -78,7 +77,7 @@ public class ImageWS_Client_Application {
                             if (a.equals(".")) break;
                             else ar.add(a);
                         }
-                        //sca.close();
+                        sca.close();
                         Iterator<String> it2 = ar.iterator();
                         it2 = ar.iterator();          
                         List<List<Object>> colores;
@@ -115,14 +114,14 @@ public class ImageWS_Client_Application {
                                     break; 
                             }
                         }
-                       // p.close();
+                        p.close();
                         
                         HashMap<Integer, Image> map = new HashMap<>();
                         Iterator<List<Object>> iter = colores.iterator();
 
-                        while(iter.hasNext()){
+                        while(iter.hasNext()){//lista de listas
                             Iterator<Object> siter = iter.next().iterator();
-                            while(siter.hasNext()){
+                            while(siter.hasNext()){//lista de objectos
                             Object img = siter.next();
                             Image image = Image.class.cast(img);
                             map.put(image.getId(), (Image) img);
@@ -143,7 +142,7 @@ public class ImageWS_Client_Application {
 
                     case 4: 
                         //modificar
-                        System.out.println("modificar:");
+                        System.out.println("Te recomendamos que uses la aplicación web para modificar una imagen");
                         break;
                     case 5: //salir
                         exit = true;
@@ -158,7 +157,7 @@ public class ImageWS_Client_Application {
             catch (InputMismatchException ime){
                     System.out.println("¡Cuidado! Solo puedes insertar números del 1 al 5. ");
             }
-            //sc.close();
+            sc.close();
             
         }
 

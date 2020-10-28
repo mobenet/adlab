@@ -13,5 +13,3 @@ nb-configuration.xml
 *.class
 *.war
 *.ear
-/Practica3/ImageWS_Client_Application/build/
-/practica2/build/
