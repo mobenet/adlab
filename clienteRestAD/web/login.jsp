@@ -18,6 +18,8 @@
             if (ses.getAttribute("user") != null) {
                 response.sendRedirect("menu.jsp");
             }
+            
+        String requestUrl = "http://localhost:8080/RestAD/webservices/generic";
         %>
         <h1>Hola! Accede a tu cuenta</h1>
         <form action="login" method="POST">
@@ -27,5 +29,10 @@
             <br><br>
             <a href="registroUsuarios.jsp">Registrate aqui</a><br><br>
         </form>
+        <script>
+            function login(){
+                document.getElementsByName("usuari")
+            }
+        </script>
     </body>
 </html>
