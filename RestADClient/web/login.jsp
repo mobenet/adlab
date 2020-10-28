@@ -20,11 +20,24 @@
             }
         %>
         <h1>Hola! Accede a tu cuenta</h1>
-        <form action="RestAD/webresources/generic/searchTitle/aefaef" method="GET">
-
+        <form id="loginForm">
+            <input type="text" name="user" required/><br>
+            <input type="password" name="password" required/><br>
             <input type="Submit"   value="Acceder"/><br>
             <br><br>
             <a href="registroUsuarios.jsp">Registrate aqui</a><br><br>
         </form>
+        <script>
+            loginForm.onsubmit = async (e) => {
+                e.preventDefault();
+                const url = 'http://localhost:8080/RestAD/webresources/generic/login'
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: new FormData(loginForm)
+                });
+                const res = await response.json();
+                alert(res.message);
+            };
+        </script>
     </body>
 </html>

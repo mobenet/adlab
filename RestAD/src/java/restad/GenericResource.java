@@ -341,6 +341,60 @@ public class GenericResource {
 
     }
 
+    /**
+     * POST method to login an existing user
+     *
+     * @param user
+     * @param password
+     * @return
+     */
+    @Path("login")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public String login(@FormParam("user") String user, @FormParam("password") String password) {
+        boolean logged = false;
+        try {
+            OurDao.startDB();
+            if (!OurDao.validatePassword(password) || !OurDao.validateUsername(user)) {
+                throw new IllegalArgumentException("Contraseña o usuario con formato invalido");
+            }
+            logged = OurDao.loggin(user, password);
+            OurDao.stopDB();
+        } catch (ClassNotFoundException | IllegalArgumentException | SQLException e) {
+            String msg = e.getMessage();
+            System.err.println(e.getMessage());
+            return "{success: false, message: '" + msg + "'}";
+        }
+        if(!logged) return "{success: false, message: 'El nombre o el usuario no son correctos'";
+        else return "{success: true, message: 'Se ha iniciado sesión con exito'}";
+    }
+
+    /**
+     * POST method to register a new user
+     *
+     * @param user
+     * @param password
+     * @return
+     */
+    @Path("register")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public String register(@FormParam("user") String user, @FormParam("password") String password) {
+        try {
+            OurDao.startDB();
+            if (!OurDao.validatePassword(password) || !OurDao.validateUsername(user)) {
+                throw new IllegalArgumentException("Contraseña o usuario con formato invalido");
+            }
+            OurDao.newuser(user, password);
+            OurDao.stopDB();
+        } catch (ClassNotFoundException | IllegalArgumentException | SQLException e) {
+            String msg = e.getMessage();
+            System.err.println(msg);
+            return "{success: false, message: '" + msg + "'}";
+        }
+        return "{success: true, message: 'Se ha registrado el usuario con exito'";
+    }
+
     private static String ImageToString(Image img) {
         return "Image{"
                 + "id=" + img.getId()
