@@ -363,7 +363,7 @@ public class GenericResource {
             OurDao.stopDB();
         } catch (ClassNotFoundException | IllegalArgumentException | SQLException e) {
             String msg = e.getMessage();
-            System.err.println(e.getMessage());
+            System.err.println(msg);
             return "{\"success\": false, \"message\": \"" + msg + "\"}";
         }
         if(!logged) return "{\"success\": false, \"message\": \"El nombre o el usuario no son correctos\"}";
@@ -392,7 +392,7 @@ public class GenericResource {
         } catch (ClassNotFoundException | IllegalArgumentException | SQLException e) {
             String msg = e.getMessage();
             System.err.println(msg);
-            return "{\"success\": false, \"message\": \"" + msg + "\"}";
+            return "{\"success\": false, \"message\": \"" + "error: "+msg + "\"}";
         }
         return "{\"success\": true, \"message\": \"Se ha registrado el usuario con exito\"}";
     }

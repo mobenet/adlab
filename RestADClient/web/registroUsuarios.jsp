@@ -27,14 +27,14 @@
         </form><br><br>
         <a href="login.jsp">Volver</a>
         <script>
-            const registerForm = document.forms['registerForm']
+            const registerForm = document.forms['registerForm'];
             registerForm.onsubmit = async (e) => {
-                e.preventDefault()
+                e.preventDefault();
                 //validate
-                const url = 'http://localhost:8080/RestAD/webresources/generic/register'
-                var data = new URLSearchParams()
-                data.append('user', registerForm.elements['user'].value)
-                data.append('password', registerForm.elements['password'].value)
+                const url = 'http://localhost:8080/RestAD/webresources/generic/register';
+                var data = new URLSearchParams();
+                data.append('user', registerForm.elements['user'].value);
+                data.append('password', registerForm.elements['password'].value);
                 const response = await fetch(url, {
                     method: 'POST',
                     body: data.toString(),
@@ -42,11 +42,11 @@
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
                 });
-                const res = await response.json()
+                const res = await response.json();
                 if (res.success) {
-                    window.location.replace('menu.jsp')
+                    window.location.replace('menu.jsp');
                 } else
-                    alert('Registro erroneo')
+                    alert('Registro erroneo');
             };
         </script>
     </body>
