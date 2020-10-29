@@ -25,10 +25,21 @@
                     const response = await fetch(url, {method: 'GET'});
                     let text = await response.text();
                     document.getElementById('listaImagenes').innerHTML = text;
-                    document.getElementsByClassName('autor').forEach(e => {
-                       const name = e.innerHTML;
-                       if(name === user)
+                    const authors = document.getElementsByClassName('autor');
+                    Array.prototype.forEach.call(authors, function (author) {
+                        const name = author.innerHTML;
+                        if (name === user) {
+                            const tdFilename = author.parentElement.lastChild;
+                            const id = author.parentElement.firstChild.innerHTML;
+                            tdFilename.innerHTML = tdFilename.innerHTML + "<br><button onclick=\"callMethod('Modificar',"+id+")\">Modificar</button>"
+                                    +"<button onclick=\"callMethod('Eliminar',"+id+")\">Eliminar</button>";
+                        }
                     });
+                }
+                function callMethod(method,id){
+                    ses.setItem('imageId',id);
+                    if(method === 'Modificar') window.location.href = 'modificarImagen.jsp';
+                    else window.location.href = 'eliminarImagen.jsp';
                 }
             }
         </script>

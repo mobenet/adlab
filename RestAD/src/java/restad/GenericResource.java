@@ -158,6 +158,7 @@ public class GenericResource {
             OurDao.stopDB();
             res += "<table border=1>"
                     + "<tr>"
+                    +"<th>Id</th>"
                     + "<th>Titulo</th>"
                     + "<th>Descripcion</th>"
                     + "<th>Palabras Clave</th>"
@@ -168,7 +169,8 @@ public class GenericResource {
                     + "</tr>";
 
             for (Image img : list) {
-                res += "<tr><td>" + img.getTitle() + "</td>"
+                res += "<tr><td>"+img.getId()+"</td>"
+                        +"<td>" + img.getTitle() + "</td>"
                         + "<td>" + img.getDescription() + "</td>"
                         + "<td>" + img.getKeywords() + "</td>"
                         + "<td class=autor>" + img.getAuthor() + "</td>"
