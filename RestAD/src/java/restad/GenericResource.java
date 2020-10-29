@@ -105,12 +105,15 @@ public class GenericResource {
     /**
      * POST method to modify an existing image
      *
+     * @param id
      * @param title
      * @param description
      * @param keywords
      * @param author
      * @param crea_date
      * @return
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
      */
     @Path("modify")
     @POST
@@ -121,25 +124,30 @@ public class GenericResource {
             @FormParam("description") String description,
             @FormParam("keywords") String keywords,
             @FormParam("author") String author,
-            @FormParam("creation") String crea_date) {
+            @FormParam("creation") String crea_date) throws ClassNotFoundException, SQLException {
+        
+        OurDao.startDB();
+        OurDao.enregistrarCanvi(title, description, keywords, author, crea_date, id);
+        OurDao.stopDB();
         return "";
     }
 
     /**
      * POST method to delete an existing image
      *
-     * @param title
-     * @param description
-     * @param keywords
-     * @param author
-     * @param crea_date
+     * @param id
      * @return
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
      */
     @Path("delete")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
-    public String deleteImage(@FormParam("id") String id) {
+    public String deleteImage(@FormParam("id") String id) throws ClassNotFoundException, SQLException {
+        OurDao.startDB();
+        OurDao.eliminar(id);
+        OurDao.stopDB();
         return "";
     }
 

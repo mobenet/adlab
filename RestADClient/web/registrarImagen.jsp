@@ -12,14 +12,7 @@
         <title>Registrar imagen</title>
     </head>
     <body>
-        <%
-            /* HttpSession ses = request.getSession(false);*/
-            //   if (ses.getAttribute("user") == null) {
-            //      response.sendRedirect("login.jsp");
-            // }
 
-        %>
-        
         <div id="success">
             <form id="registerImg">
                 <h1>Inserta tu imagen en nuestra Base de datos</h1>
@@ -30,7 +23,8 @@
                 Palabras clave: 
                 <input type="text" name="keywords" required><br><br>
                 Autor: 
-                <input type="text" name="author" required><br><br>
+                <select id="authors" name="author" required>
+                </select><br><br>
                 Fecha creación:
                 <input type=date name="creation" required><br><br>
                 Archivo:
@@ -38,7 +32,6 @@
                 <input  type="submit" value="Registrar"/>
             </form>
         </div>
-        <br><br><a href="login.jsp">Vuelve al Login</a>
         <br><br><a href="menu.jsp">Vuelve al Menú</a>
         <script>
             let ses = window.sessionStorage;
