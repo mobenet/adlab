@@ -12,12 +12,6 @@
         <title>Registro de Usuario</title>
     </head>
     <body>
-        <%
-            HttpSession ses = request.getSession(false);
-            /*if (ses.getAttribute("user") != null) {
-                response.sendRedirect("menu.jsp");
-            }*/
-        %>
         <h1>Registrate en el sistema</h1>
         <form id="registerForm">
             Usuario: <input type="text" name="user" required/><br>
@@ -26,28 +20,39 @@
             <input type="Submit"   value="Registrarse"/><br>
             <br><br>
         </form>
+        <div id="errorMessage" style="color: red"></div>
         <a href="login.jsp">Volver</a>
         <script>
+            let ses = window.sessionStorage;
+            if(ses.getItem('user') !== null){
+                window.location.replace('menu.jsp');
+            }
             const registerForm = document.forms['registerForm'];
             registerForm.onsubmit = async (e) => {
                 e.preventDefault();
-                //Validate!!
-                const url = 'http://localhost:8080/RestAD/webresources/generic/register';
-                var data = new URLSearchParams();
-                data.append('user', registerForm.elements['user'].value);
-                data.append('password', registerForm.elements['password'].value);
-                const response = await fetch(url, {
-                    method: 'POST',
-                    body: data.toString(),
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                });
-                const res = await response.json();
-                if (res.success) {
-                    window.location.replace('menu.jsp');
-                } else
-                    alert('Registro erroneo: '+res.message);
+                const pass = registerForm.elements['password'].value;
+                if (registerForm.elements.opassword.value !== pass) {
+                    document.getElementById('errorMessage').innerHTML = 'Las dos contraseñas deben coincidir';
+                } else {
+                    const url = 'http://localhost:8080/RestAD/webresources/generic/register';
+                    var data = new URLSearchParams();
+                    const user = registerForm.elements['user'].value;
+                    data.append('user', user);
+                    data.append('password', registerForm.elements['password'].value);
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: data.toString(),
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    });
+                    const res = await response.json();
+                    if (res.success) {
+                        ses.setItem('user',user);
+                        window.location.replace('menu.jsp');
+                    } else
+                        document.getElementById('errorMessage').innerHTML = res.message;
+                }
             };
         </script>
     </body>
