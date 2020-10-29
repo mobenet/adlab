@@ -9,6 +9,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -67,6 +68,7 @@ public class GenericResource {
      * @param keywords
      * @param author
      * @param crea_date
+     * @param filename
      * @return
      * @throws java.lang.ClassNotFoundException
      * @throws java.sql.SQLException
@@ -79,14 +81,30 @@ public class GenericResource {
             @FormParam("description") String description,
             @FormParam("keywords") String keywords,
             @FormParam("author") String author,
-            @FormParam("creation") String crea_date) throws ClassNotFoundException, SQLException {
-        String fileName = "hola";
+            @FormParam("creation") String crea_date,
+            @FormParam("filename") String filename) throws ClassNotFoundException, SQLException {
+       // String filename="gola";
         String storage_date = LocalDate.now().toString();
         OurDao.startDB();
-        OurDao.enregistrar(title, description, keywords, author, crea_date, storage_date, fileName);
+        OurDao.enregistrar(title, description, keywords, author, crea_date, storage_date, filename);
         OurDao.stopDB();
         return "<html><h1>HelloBitch</h1></html>";
     }
+
+    /**
+     *
+     * @param uploadedInputStream
+     * @param filename
+     * @return
+     */
+  /*  @POST
+    @Path("/upload")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public String uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
+                @FormDataParam("filename") String filename){
+        return ""; 
+    }*/
+    
 
     /**
      * POST method to modify an existing image
@@ -102,6 +120,7 @@ public class GenericResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
+
     public String modifyImage(@FormParam("id") String id,
             @FormParam("title") String title,
             @FormParam("description") String description,
