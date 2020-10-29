@@ -15,9 +15,9 @@
     <body>
         <%
             HttpSession ses = request.getSession(false);
-            if (ses.getAttribute("user") != null) {
+            /*if (ses.getAttribute("user") != null) {
                 response.sendRedirect("menu.jsp");
-            }
+            }*/
         %>
         <h1>Hola! Accede a tu cuenta</h1>
         <form id="loginForm">
@@ -31,6 +31,7 @@
             const loginForm = document.forms['loginForm']
             loginForm.onsubmit = async (e) => {
                 e.preventDefault()
+                //Validate!!
                 const url = 'http://localhost:8080/RestAD/webresources/generic/login'
                 var data = new URLSearchParams()
                 data.append('user',loginForm.elements['user'].value)
@@ -43,7 +44,9 @@
                     }
                 });
                 const res = await response.json()
-                alert(res.message)
+                if(res.success){
+                    window.location.replace('menu.jsp')
+                } else alert('Login erroneo')
             };
         </script>
     </body>

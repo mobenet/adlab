@@ -364,9 +364,9 @@ public class GenericResource {
         } catch (ClassNotFoundException | IllegalArgumentException | SQLException e) {
             String msg = e.getMessage();
             System.err.println(e.getMessage());
-            return "{success: false, message: '" + msg + "'}";
+            return "{\"success\": false, \"message\": \"" + msg + "\"}";
         }
-        if(!logged) return "{'success': false, 'message': 'El nombre o el usuario no son correctos'";
+        if(!logged) return "{\"success\": false, \"message\": \"El nombre o el usuario no son correctos\"}";
         else return "{\"success\": true, \"message\": \"Se ha iniciado sesión con exito\"}";
     }
 
@@ -392,9 +392,9 @@ public class GenericResource {
         } catch (ClassNotFoundException | IllegalArgumentException | SQLException e) {
             String msg = e.getMessage();
             System.err.println(msg);
-            return "{'success': false, 'message': '" + msg + "'}";
+            return "{\"success\": false, \"message\": \"" + msg + "\"}";
         }
-        return "{'success': true, 'message': 'Se ha registrado el usuario con exito'";
+        return "{\"success\": true, \"message\": \"Se ha registrado el usuario con exito\"}";
     }
 
     private static String ImageToString(Image img) {
