@@ -4,8 +4,6 @@
     Author     : mo
 --%>
 
-<%@page import="java.sql.ResultSet"%>
-<%@page import="ourpackage.OurDao"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,57 +12,21 @@
         <title>Listar imagenes</title>
     </head>
     <body>
-        <table border="1">
-            <tr>
-                <th>Titulo</th>
-                <th>Descripcion</th>
-                <th>Palabras Clave</th>
-                <th>Autor</th>
-                <th>Fecha de creacion</th>
-                <th>Fecha de subida</th>
-                <th>Nombre del archivo</th>
-            </tr>
-            <tr>
-                <td><%  out.println(rs.getString("TITLE"));%></td>
-                <td><%  out.println(rs.getString("DESCRIPTION"));%></td>
-                <td><%  out.println(rs.getString("KEYWORDS"));%></td>
-                <td><%
-                    String autor = rs.getString("AUTHOR");
-                    out.println(autor);
-                    %></td>
-                <td><%  out.println(rs.getString("CREATION_DATE"));%></td>
-                <td><%  out.println(rs.getString("STORAGE_DATE"));%></td>
-                <%
-                    String filename = rs.getString("FILENAME");
-                    int id = rs.getInt("ID");%>
-                <td>
-                    <%
-                        out.println("<a href=image.jsp?name=" + filename + "&id=" + id + ">" + filename + "</a>");
-                        if (autor.equals(user)) {
-                    %>
-                    <form action=selectImage method="POST">
-                        <input type="hidden" value="<%out.print(filename);%>" name="name"/>
-                        <input type="hidden" value="<%out.print(id);%>" name="id"/>
-                        <input type="submit" value="Modificar" name="action"/>
-                        <input type="submit" value="Eliminar" name="action"/>
-                    </form>
-                </td>
-            </tr>
-            <%          }
-                        }
-                        OurDao.stopDB();
-                    } catch (Exception e) {
-                        System.err.println(e.getMessage());
-                    }
-                }
-            %>
-        </table><br><br>
+        <div id="listaImagenes"></div>
         <a href="menu.jsp">Vuelve al menu</a>
         <script>
             let ses = window.sessionStorage;
             const user = ses.getItem('user');
             if (user === null)
                 window.location.replace('login.jsp');
+            else {
+                window.onload = async() => {
+                    const url = "http://localhost:8080/RestAD/webresources/generic/list";
+                    const response = await fetch(url, {method: 'GET'});
+                    let text = await response.text();
+                    document.getElementById('listaImagenes').innerHTML = text;
+                }
+            }
         </script>
     </body>
 </html>
