@@ -30,7 +30,7 @@
             const loginForm = document.forms['loginForm'];
             loginForm.onsubmit = async (e) => {
                 e.preventDefault();
-                const url = 'http://localhost:8080/RestAD/webresources/generic/login';
+                const url = 'http://localhost:8080/RestAD/webresources/generic/loginUser';
                 var data = new URLSearchParams();
                 const user = loginForm.elements['user'].value;
                 data.append('user', user);

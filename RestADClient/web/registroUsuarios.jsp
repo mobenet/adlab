@@ -34,7 +34,7 @@
                 if (registerForm.elements.opassword.value !== pass) {
                     document.getElementById('errorMessage').innerHTML = 'Las dos contraseñas deben coincidir';
                 } else {
-                    const url = 'http://localhost:8080/RestAD/webresources/generic/register';
+                    const url = 'http://localhost:8080/RestAD/webresources/generic/registerUser';
                     var data = new URLSearchParams();
                     const user = registerForm.elements['user'].value;
                     data.append('user', user);

@@ -348,7 +348,7 @@ public class GenericResource {
      * @param password
      * @return
      */
-    @Path("login")
+    @Path("loginUser")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
@@ -380,7 +380,7 @@ public class GenericResource {
      * @param password
      * @return
      */
-    @Path("register")
+    @Path("registerUser")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
