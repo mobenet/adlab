@@ -1,37 +1,58 @@
 <%-- 
-    Document   : buscarImagen
-    Created on : 07-oct-2020, 20:21:33
+    Document   : index
     Author     : elchu
 --%>
-<%@page contentType="text/html" pageEncoding="UTF-8" session="false"%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page errorPage="error.jsp"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Buscar Imagen</title>
+        <title>Login</title>
     </head>
     <body>
         <%
             HttpSession ses = request.getSession(false);
-            if(ses.getAttribute("user")==null)response.sendRedirect("login.jsp");
+            if (ses.getAttribute("user") != null) {
+                response.sendRedirect("menu.jsp");
+            }
         %>
-        <h1>Búsqueda de imagenes</h1>
-        <h2>Palabras clave a buscar (una por campo)</h2> 
-        <br><br>
-        <form method="POST" action="buscarImagen" enctype="multipart/form-data">
+        <h1>Buscar imagenes</h1>
+        
+        <form id="titul">        
+                   
             Titulo: 
-            <input type="text" value="" name="title"><br><br>
-            Palabras clave: 
-            <input type="text" name="keywords"><br><br>
+            <input type="text" name="title"/><br><br>
+           
             Autor: 
-            <input type="text" name="author"><br><br>
+            <input type="text" name="author"/><br><br>
+            Palabras clave: 
+            <input type="text" name="keywords"/><br><br>
+            
             Fecha creación:
-            <input type="text" name="cdate"><br><br>
-
-            <input type="submit" name="Submit" value="Submit"> 
+            <input type="text" name="cdate"/><br><br>
+            
+            <input type="Submit"   value="Acceder"/><br>
+        </form>                             
+        <script>
+            const formimage = document.forms['titul'];
+            formimage.onsubmit = async (e) => {
+                e.preventDefault();
+                //Validate!!
+               
+                const url = 'http://localhost:8080/RestAD/webresources/generic/searchcombi/'+formimage.elements['title'].value +'/'+formimage.elements['author'].value;'/'+formimage.elements['keywords'].value+'/'+formimage.elements['cdate'].value;
+                const response = await fetch(url, {
+                    method: 'GET'
+                });
+                const res = await response.text();
+                document.getElementById("tablaimagen").innerHTML = res;
+            };
+            
+        </script>
+        <div id="tablaimagen"></div>
+        
             <br><br>
-            <a href="menu.jsp">Menu principal</a>
-        </form>
+            <a href="menu.jsp">Volver al menu</a><br><br>
     </body>
 </html>

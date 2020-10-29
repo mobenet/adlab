@@ -19,6 +19,7 @@
             // }
 
         %>
+        
         <div id="success">
             <form id="registerImg">
                 <h1>Inserta tu imagen en nuestra Base de datos</h1>
@@ -37,15 +38,13 @@
                 <input  type="submit" value="Registrar"/>
             </form>
         </div>
-
-
         <br><br><a href="login.jsp">Vuelve al Login</a>
         <br><br><a href="menu.jsp">Vuelve al Menú</a>
         <script>
-            /* let ses = window.sessionStorage;
-             if (ses.getItem('user') !== null) {
-             window.location.replace('menu.jsp');
-             }*/
+            let ses = window.sessionStorage;
+            if (ses.getItem('user') === null) {
+                window.location.replace('menu.jsp');
+            }
             const registerImg = document.forms['registerImg'];
             registerImg.onsubmit = async (e) => {
                 e.preventDefault();
@@ -69,7 +68,7 @@
                 const res = await response.text();
                 const success = "Tu imagen ha sido registrada correctamente"
                 if (response.ok) {
-                    document.getElementById('success').innerHTML = succes; 
+                    document.getElementById('success').innerHTML = success;
                 } else
                     alert('Registro erroneo');
             };

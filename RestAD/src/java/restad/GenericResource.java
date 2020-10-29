@@ -156,16 +156,15 @@ public class GenericResource {
     }
 
     /**
-     * GET method to search images by id
-     *
-     * @param id
-     * @return
-     */
-    @Path("searchID/{id}")
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    public String searchByID(@PathParam("id") int id) {
-        Image tmp = new Image();//cambiar
+ * GET method to search images by id
+ * @param id
+ * @return
+ */
+ @Path("searchID/{id}")
+ @GET
+ @Produces(MediaType.TEXT_HTML)
+ public String searchByID (@PathParam("id") int id) {
+    Image tmp = new Image();//cambiar
         try {
             //TODO write your implementation code here:
             HashMap<String, String> map = new HashMap<>();
@@ -173,9 +172,8 @@ public class GenericResource {
             OurDao.startDB();
             ResultSet res;
             res = OurDao.consultar(map);
-            if (res == null) {
-                return "Busqueda vacia";//prova
-            }
+            if(res==null)return "Busqueda vacia";//prova
+            
             if (res.next()) {
                 tmp.setId(res.getInt("ID"));
                 tmp.setTitle(res.getString("TITLE"));
@@ -210,160 +208,194 @@ public class GenericResource {
             System.err.println(ex.getMessage());
             return null;
         }
-        return ImageToString(tmp);
+     return ImageToString(tmp);
+ }
+ 
+ 
+ /**
+ * GET method to search images by title
+ * @param title1
+ * @param author1
+ * @param keywords1
+ * @param cDate1
+ * @return
+ */
+ @Path("searchcombi/{title1}")
+ //@Path("searchcombi/{title1}/{author1}/{keywords1}/{cDate1}")
+ @GET
+ @Produces(MediaType.TEXT_HTML)
+ public String searchCombi (@PathParam("title1") String title1,
+         @PathParam("author1") String author1,
+         @PathParam("keywords1") String keywords1,
+         @PathParam("cDate1") String cDate1) {
+    String resultat =  "<table>\n"
+                            + "            <tr>\n"
+                            + "                <th>Titulo</th>\n"
+                            + "                <th>Descripcion</th>\n"
+                            + "                <th>Palabras Clave</th>\n"
+                            + "                <th>Autor</th>\n"
+                            + "                <th>Fecha de creacion</th>\n"
+                            + "                <th>Fecha de subida</th>\n"
+                            + "                <th>Nombre del archivo</th>\n"
+                            + "            </tr>";
+    
+    if ((!"".equals(title1)) | (!" ".equals(title1))) {
+        resultat += searchByTitle(title1);
     }
-
-    /**
-     * GET method to search images by title
-     *
-     * @param title
-     * @return
-     */
-    @Path("searchTitle/{title}")
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    public String searchByTitle(@PathParam("title") String title) {
-        ArrayList<Image> lista = new ArrayList<>();
+    if ((!"".equals(author1)) | (!" ".equals(author1))) {
+        resultat += searchByAuthor(author1);
+    }
+    if ((!"".equals(keywords1)) | (!" ".equals(keywords1))) {
+        resultat += searchByKeywords(keywords1);
+    }
+    if ((!"".equals(cDate1)) | (!" ".equals(cDate1))) {
+        resultat += searchByCreationDate(cDate1);
+    }
+  
+    resultat += "</table>";
+    return resultat;
+ }
+ 
+ 
+ 
+ 
+ /**
+ * GET method to search images by title
+ * @param title
+ * @return
+ */
+ @Path("searchTitle/{title}")
+ @GET
+ @Produces(MediaType.TEXT_HTML)
+ public String searchByTitle (@PathParam("title") String title) {
+     String resultat = "";
         try {
             HashMap<String, String> map = new HashMap<>();
             map.put("title", "%" + title + "%");
             OurDao.startDB();
-            ResultSet res;
-            res = OurDao.consultar(map);
-            while (res.next()) {
-                Image tmp = new Image();
-                tmp.setId(res.getInt("ID"));
-                tmp.setTitle(res.getString("TITLE"));
-                tmp.setAuthor(res.getString("AUTHOR"));
-                tmp.setDescription(res.getString("DESCRIPTION"));
-                tmp.setKeywords(res.getString("KEYWORDS"));
-                tmp.setCreationDate(res.getString("CREATION_DATE"));
-                tmp.setStorageDate(res.getString("STORAGE_DATE"));
-                tmp.setFileName(res.getString("FILENAME"));
-                lista.add(tmp);
+            ResultSet rs;
+            rs = OurDao.consultar(map);
+            while (rs.next()) {
+                resultat += "<tr><td>"+rs.getString("TITLE")+"</td>"
+                        + "<td>" + rs.getString("DESCRIPTION") + "</td>"
+                        + "<td>" + rs.getString("KEYWORDS") + "</td>"
+                        + "<td>" + rs.getString("AUTHOR") + "</td>"
+                        + "<td>" + rs.getString("CREATION_DATE") + "</td>"
+                        + "<td>" + rs.getString("STORAGE_DATE") + "</td>"
+                        + "<td><a href=image.jsp?name=" + rs.getString("FILENAME") + "&id=" + rs.getInt("ID") + ">" + rs.getString("FILENAME") + "</a></td></tr>";
+             
             }
             OurDao.stopDB();
 
         } catch (ClassNotFoundException | SQLException ex) {
             System.err.println(ex.getMessage());
         }
-
-        return title;
-    }
-
-    /**
-     * GET method to search images by creation date
-     *
-     * @param creaDate
-     * @return
-     */
-    @Path("searchCreationDate/{date}")
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    public String searchByCreationDate(@PathParam("date") String creaDate) {
-        ArrayList<Image> lista = new ArrayList<>();
+     return resultat;
+ }
+ 
+ /**
+ * GET method to search images by creation date
+ * @param creaDate
+ * @return
+ */
+ @Path("searchCreationDate/{date}")
+ @GET
+ @Produces(MediaType.TEXT_HTML)
+ public String searchByCreationDate (@PathParam("date") String creaDate){
+        String resultat = "";
         try {
             HashMap<String, String> map = new HashMap<>();
-            map.put("cdate", "%" + creaDate + "%");
+            map.put("title", "%" + creaDate + "%");
             OurDao.startDB();
-            ResultSet res;
-            res = OurDao.consultar(map);
-            while (res.next()) {
-                Image tmp = new Image();
-                tmp.setId(res.getInt("ID"));
-                tmp.setTitle(res.getString("TITLE"));
-                tmp.setAuthor(res.getString("AUTHOR"));
-                tmp.setDescription(res.getString("DESCRIPTION"));
-                tmp.setKeywords(res.getString("KEYWORDS"));
-                tmp.setCreationDate(res.getString("CREATION_DATE"));
-                tmp.setStorageDate(res.getString("STORAGE_DATE"));
-                tmp.setFileName(res.getString("FILENAME"));
-                lista.add(tmp);
+            ResultSet rs;
+            rs = OurDao.consultar(map);
+            while (rs.next()) {
+                resultat += "<tr><td>"+rs.getString("TITLE")+"</td>"
+                        + "<td>" + rs.getString("DESCRIPTION") + "</td>"
+                        + "<td>" + rs.getString("KEYWORDS") + "</td>"
+                        + "<td>" + rs.getString("AUTHOR") + "</td>"
+                        + "<td>" + rs.getString("CREATION_DATE") + "</td>"
+                        + "<td>" + rs.getString("STORAGE_DATE") + "</td>"
+                        + "<td><a href=image.jsp?name=" + rs.getString("FILENAME") + "&id=" + rs.getInt("ID") + ">" + rs.getString("FILENAME") + "</a></td></tr>";
+             
             }
             OurDao.stopDB();
 
         } catch (ClassNotFoundException | SQLException ex) {
             System.err.println(ex.getMessage());
         }
-
-        return "";
-    }
-
-    /**
-     * GET method to search images by author
-     *
-     * @param author
-     * @return
-     */
-    @Path("searchAuthor/{author}")
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    public String searchByAuthor(@PathParam("author") String author) {
-        ArrayList<Image> lista = new ArrayList<>();
+     return resultat;
+ }
+ 
+  /**
+ * GET method to search images by author
+ * @param author
+ * @return
+ */
+ @Path("searchAuthor/{author}")
+ @GET
+ @Produces(MediaType.TEXT_HTML)
+ public String searchByAuthor (@PathParam("author") String author){
+    String resultat = "";
         try {
             HashMap<String, String> map = new HashMap<>();
-            map.put("author", "%" + author + "%");//controlar el sql ijection
+            map.put("title", "%" + author + "%");
             OurDao.startDB();
-            ResultSet res;
-            res = OurDao.consultar(map);
-            while (res.next()) {
-                Image tmp = new Image();
-                tmp.setId(res.getInt("ID"));
-                tmp.setTitle(res.getString("TITLE"));
-                tmp.setAuthor(res.getString("AUTHOR"));
-                tmp.setDescription(res.getString("DESCRIPTION"));
-                tmp.setKeywords(res.getString("KEYWORDS"));
-                tmp.setCreationDate(res.getString("CREATION_DATE"));
-                tmp.setStorageDate(res.getString("STORAGE_DATE"));
-                tmp.setFileName(res.getString("FILENAME"));
-                lista.add(tmp);
+            ResultSet rs;
+            rs = OurDao.consultar(map);
+            while (rs.next()) {
+                resultat += "<tr><td>"+rs.getString("TITLE")+"</td>"
+                        + "<td>" + rs.getString("DESCRIPTION") + "</td>"
+                        + "<td>" + rs.getString("KEYWORDS") + "</td>"
+                        + "<td>" + rs.getString("AUTHOR") + "</td>"
+                        + "<td>" + rs.getString("CREATION_DATE") + "</td>"
+                        + "<td>" + rs.getString("STORAGE_DATE") + "</td>"
+                        + "<td><a href=image.jsp?name=" + rs.getString("FILENAME") + "&id=" + rs.getInt("ID") + ">" + rs.getString("FILENAME") + "</a></td></tr>";
+             
             }
             OurDao.stopDB();
 
         } catch (ClassNotFoundException | SQLException ex) {
             System.err.println(ex.getMessage());
         }
-        return "";
-    }
-
-    /**
-     * GET method to search images by keyword
-     *
-     * @param keywords
-     * @return
-     */
-    @Path("searchKeywords/{keywords}")
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    public String searchByKeywords(@PathParam("keywords") String keywords) {
-        ArrayList<Image> lista = new ArrayList<>();
+     return resultat;
+ }
+ 
+ /**
+ * GET method to search images by keyword
+ * @param keywords
+ * @return
+ */
+ @Path("searchKeywords/{keywords}")
+ @GET
+ @Produces(MediaType.TEXT_HTML)
+ public String searchByKeywords (@PathParam("keywords") String keywords) {
+    String resultat = "";
         try {
             HashMap<String, String> map = new HashMap<>();
-            map.put("keywords", "%" + keywords + "%");//controlar el sql ijection
+            map.put("title", "%" + keywords + "%");
             OurDao.startDB();
-            ResultSet res;
-            res = OurDao.consultar(map);
-            while (res.next()) {
-                Image tmp = new Image();
-                tmp.setId(res.getInt("ID"));
-                tmp.setTitle(res.getString("TITLE"));
-                tmp.setAuthor(res.getString("AUTHOR"));
-                tmp.setDescription(res.getString("DESCRIPTION"));
-                tmp.setKeywords(res.getString("KEYWORDS"));
-                tmp.setCreationDate(res.getString("CREATION_DATE"));
-                tmp.setStorageDate(res.getString("STORAGE_DATE"));
-                tmp.setFileName(res.getString("FILENAME"));
-                lista.add(tmp);
+            ResultSet rs;
+            rs = OurDao.consultar(map);
+            while (rs.next()) {
+                resultat += "<tr><td>"+rs.getString("TITLE")+"</td>"
+                        + "<td>" + rs.getString("DESCRIPTION") + "</td>"
+                        + "<td>" + rs.getString("KEYWORDS") + "</td>"
+                        + "<td>" + rs.getString("AUTHOR") + "</td>"
+                        + "<td>" + rs.getString("CREATION_DATE") + "</td>"
+                        + "<td>" + rs.getString("STORAGE_DATE") + "</td>"
+                        + "<td><a href=image.jsp?name=" + rs.getString("FILENAME") + "&id=" + rs.getInt("ID") + ">" + rs.getString("FILENAME") + "</a></td></tr>";
+             
             }
             OurDao.stopDB();
 
         } catch (ClassNotFoundException | SQLException ex) {
             System.err.println(ex.getMessage());
         }
-        return "";
-
-    }
-
+     return resultat;
+     
+ }
+ 
     /**
      * POST method to login an existing user
      *
@@ -429,7 +461,6 @@ public class GenericResource {
 
         return "{\"success\": true, \"message\": \"Se ha registrado el usuario con exito\"}";
     }
-
     private static String ImageToString(Image img) {
         return "Image{"
                 + "id=" + img.getId()

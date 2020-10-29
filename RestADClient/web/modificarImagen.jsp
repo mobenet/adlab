@@ -13,13 +13,7 @@
         <title>Modificar Imagen</title>
     </head>
     <body>
-         <% 
-       //     HttpSession ses = request.getSession(false);
-       //     String user = (String) ses.getAttribute("user");
-       //     if(user == null) {
-       //         response.sendRedirect("login.jsp");
-       //     } else {
-        %>
+
         <table border="1">
             <tr>
                 <th>Titulo</th>
@@ -29,13 +23,7 @@
                 <th>Fecha de creacion</th>
                 <th>Nombre del archivo</th>
             </tr>
-            <% 
-     
-        String fechaS = "2020/20/20"; 
-        String author = "hola";
-        String fileN = "nombreArchivo";
-            %>
-       
+
         </table><br><br>
         <h2>Escribe todos los valores, tanto los que quieras modificar com los que no</h2>  
         <form method="POST" action="http://localhost:8080/RestAD/webresources/generic/register/">
@@ -54,4 +42,7 @@
         </form>
         <br><br><a href="menu.jsp">Vuelve al Menú</a>
     </body>
+    <script>
+        
+    </script>
 </html>
