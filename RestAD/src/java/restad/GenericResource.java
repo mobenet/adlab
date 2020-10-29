@@ -366,8 +366,11 @@ public class GenericResource {
             System.err.println(msg);
             return "{\"success\": false, \"message\": \"" + msg + "\"}";
         }
-        if(!logged) return "{\"success\": false, \"message\": \"El nombre o el usuario no son correctos\"}";
-        else return "{\"success\": true, \"message\": \"Se ha iniciado sesión con exito\"}";
+        if (!logged) {
+            return "{\"success\": false, \"message\": \"El nombre o el usuario no son correctos\"}";
+        } else {
+            return "{\"success\": true, \"message\": \"Se ha iniciado sesión con exito\"}";
+        }
     }
 
     /**
@@ -392,7 +395,7 @@ public class GenericResource {
         } catch (ClassNotFoundException | IllegalArgumentException | SQLException e) {
             String msg = e.getMessage();
             System.err.println(msg);
-            return "{\"success\": false, \"message\": \"" + "error: "+msg + "\"}";
+            return "{\"success\": false, \"message\": \"" + msg + "\"}";
         }
         return "{\"success\": true, \"message\": \"Se ha registrado el usuario con exito\"}";
     }

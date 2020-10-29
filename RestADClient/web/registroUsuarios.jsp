@@ -20,17 +20,18 @@
         %>
         <h1>Registrate en el sistema</h1>
         <form id="registerForm">
-            Usuario: <input type="text"     name="user"/><br>
-            Contraseña: <input type="password" name="password"/><br>
-            Confirma Contraseña: <input type="password" name="opassword"/><br>
+            Usuario: <input type="text" name="user" required/><br>
+            Contraseña: <input type="password" name="password" required/><br>
+            Repite la contraseña: <input type="password" name="opassword" required/><br>
             <input type="Submit"   value="Registrarse"/><br>
-        </form><br><br>
+            <br><br>
+        </form>
         <a href="login.jsp">Volver</a>
         <script>
             const registerForm = document.forms['registerForm'];
             registerForm.onsubmit = async (e) => {
                 e.preventDefault();
-                //validate
+                //Validate!!
                 const url = 'http://localhost:8080/RestAD/webresources/generic/register';
                 var data = new URLSearchParams();
                 data.append('user', registerForm.elements['user'].value);
@@ -46,7 +47,7 @@
                 if (res.success) {
                     window.location.replace('menu.jsp');
                 } else
-                    alert('Registro erroneo');
+                    alert('Registro erroneo: '+res.message);
             };
         </script>
     </body>

@@ -21,8 +21,8 @@
         %>
         <h1>Hola! Accede a tu cuenta</h1>
         <form id="loginForm">
-            <input type="text" name="user" required/><br>
-            <input type="password" name="password" required/><br>
+            Usuario: <input type="text" name="user" required/><br>
+            Contraseña: <input type="password" name="password" required/><br>
             <input type="Submit"   value="Acceder"/><br>
             <br><br>
             <a href="registroUsuarios.jsp">Registrate aqui</a><br><br>
