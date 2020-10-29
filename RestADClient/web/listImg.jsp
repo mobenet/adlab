@@ -25,6 +25,10 @@
                     const response = await fetch(url, {method: 'GET'});
                     let text = await response.text();
                     document.getElementById('listaImagenes').innerHTML = text;
+                    document.getElementsByClassName('autor').forEach(e => {
+                       const name = e.innerHTML;
+                       if(name === user)
+                    });
                 }
             }
         </script>

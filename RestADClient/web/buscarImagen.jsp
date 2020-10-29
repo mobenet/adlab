@@ -20,7 +20,7 @@
             <input type="text" name="title"/><br><br>
 
             Autor: 
-            <select id="authors" name="author" required>
+            <select id="authors" name="author">
             </select>
             <br><br>
             Palabras clave: 
@@ -50,12 +50,9 @@
                 formimage.onsubmit = async (e) => {
                     e.preventDefault();
                     //Validate!!
-
-                    const url = baseurl + 'searchcombi/'
-                            + formimage.elements['title'].value
-                            + '/' + formimage.elements['author'].value
-                            + '/' + formimage.elements['keywords'].value
-                            + '/' + formimage.elements['cdate'].value;
+                    let url = baseurl+'searchcombi?'
+                    const queryString = new URLSearchParams(new FormData(formimage)).toString();
+                    url+=queryString;
                     const response = await fetch(url, {
                         method: 'GET'
                     });

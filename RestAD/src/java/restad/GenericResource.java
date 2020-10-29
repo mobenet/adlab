@@ -25,6 +25,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -170,7 +171,7 @@ public class GenericResource {
                 res += "<tr><td>" + img.getTitle() + "</td>"
                         + "<td>" + img.getDescription() + "</td>"
                         + "<td>" + img.getKeywords() + "</td>"
-                        + "<td>" + img.getAuthor() + "</td>"
+                        + "<td class=autor>" + img.getAuthor() + "</td>"
                         + "<td>" + img.getCreationDate() + "</td>"
                         + "<td>" + img.getStorageDate() + "</td>"
                         + "<td>" + img.getFileName() + "</td>";
@@ -248,14 +249,13 @@ public class GenericResource {
      * @param cDate1
      * @return
      */
-    @Path("searchcombi/{title1}")
-    //@Path("searchcombi/{title1}/{author1}/{keywords1}/{cDate1}")
+    @Path("searchcombi")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public String searchCombi(@PathParam("title1") String title1,
-            @PathParam("author1") String author1,
-            @PathParam("keywords1") String keywords1,
-            @PathParam("cDate1") String cDate1) {
+    public String searchCombi(@QueryParam("title") String title1,
+            @QueryParam("author") String author1,
+            @QueryParam("keywords") String keywords1,
+            @QueryParam("cdate") String cDate1) {
         String resultat = "<table>\n"
                 + "            <tr>\n"
                 + "                <th>Titulo</th>\n"
