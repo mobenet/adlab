@@ -7,6 +7,7 @@ package restad;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
+//import org.glassfish.jersey.media.multipart.*; 
 
 /**
  *
@@ -19,6 +20,8 @@ public class ApplicationConfig extends Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
         addRestResourceClasses(resources);
+      
+     //   resources.add(org.glassfish.jersey.media.multipart.MultiPartFeature.class);
         return resources;
     }
 

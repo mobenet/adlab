@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.ws.rs.core.Context;
@@ -45,89 +46,112 @@ public class GenericResource {
 
     /**
      * Retrieves representation of an instance of restad.GenericResource
+     *
      * @return an instance of java.lang.String
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String getHtml() {
         //TODO return proper representation object
-        
+
         //throw new UnsupportedOperationException();
         return "<html><head/><body><h1>Hello World!</h1></body></html>";
-        
+
     }
-    
-    
+
     /**
- * POST method to register a new image
- * @param title
- * @param description
- * @param keywords
- * @param author
- * @param crea_date
- * @return
- */
- @Path("register")
- @POST
- @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
- @Produces(MediaType.TEXT_HTML)
- public String registerImage (@FormParam("title") String title,
- @FormParam("description") String description,
- @FormParam("keywords") String keywords,
- @FormParam("author") String author,
- @FormParam("creation") String crea_date){ return "";}
- /**
- * POST method to modify an existing image
- * @param title
- * @param description
- * @param keywords
- * @param author
- * @param crea_date
- * @return
- */
- @Path("modify")
- @POST
- @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
- @Produces(MediaType.TEXT_HTML)
- public String modifyImage (@FormParam("id") String id,
-@FormParam("title") String title,
- @FormParam("description") String description,
- @FormParam("keywords") String keywords,
- @FormParam("author") String author,
- @FormParam("creation") String crea_date){ return "";}
- /**
- * POST method to delete an existing image
- * @param title
- * @param description
- * @param keywords
- * @param author
- * @param crea_date
- * @return
- */
- @Path("delete")
- @POST
- @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
- @Produces(MediaType.TEXT_HTML)
- public String deleteImage (@FormParam("id") String id) { return "";}
- /**
- * GET method to list images
- * @return
- */
- @Path("list")
- @GET
- @Produces(MediaType.TEXT_HTML)
- public String listImages (){ return "";}
-    
+     * POST method to register a new image
+     *
+     * @param title
+     * @param description
+     * @param keywords
+     * @param author
+     * @param crea_date
+     * @return
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
+     */
+    @Path("register")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_HTML)
+    public String registerImage(@FormParam("title") String title,
+            @FormParam("description") String description,
+            @FormParam("keywords") String keywords,
+            @FormParam("author") String author,
+            @FormParam("creation") String crea_date) throws ClassNotFoundException, SQLException {
+        String fileName = "hola";
+        String storage_date = LocalDate.now().toString();
+        OurDao.startDB();
+        OurDao.enregistrar(title, description, keywords, author, crea_date, storage_date, fileName);
+        OurDao.stopDB();
+        return "<html><h1>HelloBitch</h1></html>";
+    }
+
     /**
- * GET method to search images by id
- * @param id
- * @return
- */
- @Path("searchID/{id}")
- @GET
- @Produces(MediaType.TEXT_HTML)
- public String searchByID (@PathParam("id") int id) {
-    Image tmp = new Image();//cambiar
+     * POST method to modify an existing image
+     *
+     * @param title
+     * @param description
+     * @param keywords
+     * @param author
+     * @param crea_date
+     * @return
+     */
+    @Path("modify")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_HTML)
+    public String modifyImage(@FormParam("id") String id,
+            @FormParam("title") String title,
+            @FormParam("description") String description,
+            @FormParam("keywords") String keywords,
+            @FormParam("author") String author,
+            @FormParam("creation") String crea_date) {
+        return "";
+    }
+
+    /**
+     * POST method to delete an existing image
+     *
+     * @param title
+     * @param description
+     * @param keywords
+     * @param author
+     * @param crea_date
+     * @return
+     */
+    @Path("delete")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_HTML)
+    public String deleteImage(@FormParam("id") String id) {
+        return "";
+    }
+
+    /**
+     * GET method to list images
+     *
+     * @return
+     */
+    @Path("list")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public String listImages() {
+        return "";
+    }
+
+    /**
+     * GET method to search images by id
+     *
+     * @param id
+     * @return
+     */
+    @Path("searchID/{id}")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public String searchByID(@PathParam("id") int id) {
+        Image tmp = new Image();//cambiar
         try {
             //TODO write your implementation code here:
             HashMap<String, String> map = new HashMap<>();
@@ -135,8 +159,9 @@ public class GenericResource {
             OurDao.startDB();
             ResultSet res;
             res = OurDao.consultar(map);
-            if(res==null)return "Busqueda vacia";//prova
-            
+            if (res == null) {
+                return "Busqueda vacia";//prova
+            }
             if (res.next()) {
                 tmp.setId(res.getInt("ID"));
                 tmp.setTitle(res.getString("TITLE"));
@@ -171,19 +196,20 @@ public class GenericResource {
             System.err.println(ex.getMessage());
             return null;
         }
-     return ImageToString(tmp);
- }
- 
- /**
- * GET method to search images by title
- * @param title
- * @return
- */
- @Path("searchTitle/{title}")
- @GET
- @Produces(MediaType.TEXT_HTML)
- public String searchByTitle (@PathParam("title") String title){
-     ArrayList<Image> lista = new ArrayList<>();
+        return ImageToString(tmp);
+    }
+
+    /**
+     * GET method to search images by title
+     *
+     * @param title
+     * @return
+     */
+    @Path("searchTitle/{title}")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public String searchByTitle(@PathParam("title") String title) {
+        ArrayList<Image> lista = new ArrayList<>();
         try {
             HashMap<String, String> map = new HashMap<>();
             map.put("title", "%" + title + "%");
@@ -207,19 +233,20 @@ public class GenericResource {
         } catch (ClassNotFoundException | SQLException ex) {
             System.err.println(ex.getMessage());
         }
-     
-     return "";
- }
- 
- /**
- * GET method to search images by creation date
- * @param creaDate
- * @return
- */
- @Path("searchCreationDate/{date}")
- @GET
- @Produces(MediaType.TEXT_HTML)
- public String searchByCreationDate (@PathParam("date") String creaDate){
+
+        return "";
+    }
+
+    /**
+     * GET method to search images by creation date
+     *
+     * @param creaDate
+     * @return
+     */
+    @Path("searchCreationDate/{date}")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public String searchByCreationDate(@PathParam("date") String creaDate) {
         ArrayList<Image> lista = new ArrayList<>();
         try {
             HashMap<String, String> map = new HashMap<>();
@@ -241,23 +268,24 @@ public class GenericResource {
             }
             OurDao.stopDB();
 
-       } catch (ClassNotFoundException | SQLException ex) {
-           System.err.println(ex.getMessage());
-       }
- 
- return "";
- }
- 
-  /**
- * GET method to search images by author
- * @param author
- * @return
- */
- @Path("searchAuthor/{author}")
- @GET
- @Produces(MediaType.TEXT_HTML)
- public String searchByAuthor (@PathParam("author") String author){
-     ArrayList<Image> lista = new ArrayList<>();
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+
+        return "";
+    }
+
+    /**
+     * GET method to search images by author
+     *
+     * @param author
+     * @return
+     */
+    @Path("searchAuthor/{author}")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public String searchByAuthor(@PathParam("author") String author) {
+        ArrayList<Image> lista = new ArrayList<>();
         try {
             HashMap<String, String> map = new HashMap<>();
             map.put("author", "%" + author + "%");//controlar el sql ijection
@@ -282,18 +310,19 @@ public class GenericResource {
             System.err.println(ex.getMessage());
         }
         return "";
- }
- 
- /**
- * GET method to search images by keyword
- * @param keywords
- * @return
- */
- @Path("searchKeywords/{keywords}")
- @GET
- @Produces(MediaType.TEXT_HTML)
- public String searchByKeywords (@PathParam("keywords") String keywords) {
-     ArrayList<Image> lista = new ArrayList<>();
+    }
+
+    /**
+     * GET method to search images by keyword
+     *
+     * @param keywords
+     * @return
+     */
+    @Path("searchKeywords/{keywords}")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public String searchByKeywords(@PathParam("keywords") String keywords) {
+        ArrayList<Image> lista = new ArrayList<>();
         try {
             HashMap<String, String> map = new HashMap<>();
             map.put("keywords", "%" + keywords + "%");//controlar el sql ijection
@@ -317,36 +346,26 @@ public class GenericResource {
         } catch (ClassNotFoundException | SQLException ex) {
             System.err.println(ex.getMessage());
         }
-    return "";
-     
- }
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-private static String ImageToString(Image img) {
-        return "Image{" + 
-                "id=" + img.getId() 
-                + ", title=" + img.getTitle() 
-                + ", author=" + img.getAuthor()
-                + ", description=" + img.getDescription() 
-                + ", keywords=" + img.getKeywords() 
-                + ", creationDate=" + img.getCreationDate()
-                + ", storageDate=" + img.getStorageDate() 
-                + ", fileName=" + img.getFileName() + '}';
-        
+        return "";
+
     }
+
+    private static String ImageToString(Image img) {
+        return "Image{"
+                + "id=" + img.getId()
+                + ", title=" + img.getTitle()
+                + ", author=" + img.getAuthor()
+                + ", description=" + img.getDescription()
+                + ", keywords=" + img.getKeywords()
+                + ", creationDate=" + img.getCreationDate()
+                + ", storageDate=" + img.getStorageDate()
+                + ", fileName=" + img.getFileName() + '}';
+
+    }
+
     /**
      * PUT method for updating or creating an instance of GenericResource
+     *
      * @param content representation for the resource
      */
     @PUT
