@@ -28,15 +28,22 @@
             <a href="registroUsuarios.jsp">Registrate aqui</a><br><br>
         </form>
         <script>
+            const loginForm = document.forms['loginForm']
             loginForm.onsubmit = async (e) => {
-                e.preventDefault();
+                e.preventDefault()
                 const url = 'http://localhost:8080/RestAD/webresources/generic/login'
+                var data = new URLSearchParams()
+                data.append('user',loginForm.elements['user'].value)
+                data.append('password',loginForm.elements['password'].value)
                 const response = await fetch(url, {
                     method: 'POST',
-                    body: new FormData(loginForm)
+                    body: data.toString(),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
                 });
-                const res = await response.json();
-                alert(res.message);
+                const res = await response.json()
+                alert(res.message)
             };
         </script>
     </body>

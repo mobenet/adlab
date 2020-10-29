@@ -350,6 +350,7 @@ public class GenericResource {
      */
     @Path("login")
     @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public String login(@FormParam("user") String user, @FormParam("password") String password) {
         boolean logged = false;
@@ -365,8 +366,8 @@ public class GenericResource {
             System.err.println(e.getMessage());
             return "{success: false, message: '" + msg + "'}";
         }
-        if(!logged) return "{success: false, message: 'El nombre o el usuario no son correctos'";
-        else return "{success: true, message: 'Se ha iniciado sesión con exito'}";
+        if(!logged) return "{'success': false, 'message': 'El nombre o el usuario no son correctos'";
+        else return "{\"success\": true, \"message\": \"Se ha iniciado sesión con exito\"}";
     }
 
     /**
@@ -378,6 +379,7 @@ public class GenericResource {
      */
     @Path("register")
     @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public String register(@FormParam("user") String user, @FormParam("password") String password) {
         try {
@@ -390,9 +392,9 @@ public class GenericResource {
         } catch (ClassNotFoundException | IllegalArgumentException | SQLException e) {
             String msg = e.getMessage();
             System.err.println(msg);
-            return "{success: false, message: '" + msg + "'}";
+            return "{'success': false, 'message': '" + msg + "'}";
         }
-        return "{success: true, message: 'Se ha registrado el usuario con exito'";
+        return "{'success': true, 'message': 'Se ha registrado el usuario con exito'";
     }
 
     private static String ImageToString(Image img) {
