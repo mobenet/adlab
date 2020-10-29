@@ -32,7 +32,7 @@
                 e.preventDefault();
                 const url = 'http://localhost:8080/RestAD/webresources/generic/login';
                 var data = new URLSearchParams();
-                const user = loginForm.elements['user'].value
+                const user = loginForm.elements['user'].value;
                 data.append('user', user);
                 data.append('password', loginForm.elements['password'].value);
                 const response = await fetch(url, {
@@ -44,7 +44,7 @@
                 });
                 const res = await response.json();
                 if (res.success) {
-                    ses.setItem('user', user)
+                    ses.setItem('user', user);
                     window.location.replace('menu.jsp');
                 } else
                     document.getElementById('errorMessage').innerHTML = res.message;
