@@ -12,17 +12,21 @@
         <title>Menú</title>
     </head>
     <body>
-        <%
-        HttpSession ses = request.getSession(false);
-        String user = (String) ses.getAttribute("user");
-        if(user == null) response.sendRedirect("login.jsp");
-        
-        %>
         <h1>Has accedido al Menú</h1>
-        <h2>Bienvenido, <%out.print(user);%></h2>
+        <h2 id="name">Bienvenido, </h2>
         <a href= "registrarImagen.jsp">Registra Imagen</a><br><br>
         <a href="listImg.jsp">Lista Imagenes</a><br><br>
         <a href="buscarImagen.jsp">Busca Imagen</a><br><br>
         <a href="logout.jsp">Cerrar sesion</a><br><br>
+        <script>
+            let ses = window.sessionStorage;
+            const user = ses.getItem('user');
+            if (user === null)
+                window.location.replace('login.jsp');
+            else {
+                document.getElementById('name').innerHTML += user;
+            }
+        </script>
     </body>
+
 </html>

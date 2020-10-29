@@ -19,31 +19,33 @@
             // }
 
         %>
-        <form id="registerImg">
-            <h1>Inserta tu imagen en nuestra Base de datos</h1>
-            Titulo: 
-            <input type="text" name="title" required><br><br>
-            Descripción: 
-            <input type="text" name="description" required><br><br>
-            Palabras clave: 
-            <input type="text" name="keywords" required><br><br>
-            Autor: 
-            <input type="text" name="author" required><br><br>
-            Fecha creación:
-            <input type=date name="creation" required><br><br>
-            Archivo:
-            <input type="text" name="filename" required><br><br>
-            <input  type="submit" value="Registrar"/>
-        </form>
+        <div id="success">
+            <form id="registerImg">
+                <h1>Inserta tu imagen en nuestra Base de datos</h1>
+                Titulo: 
+                <input type="text" name="title" required><br><br>
+                Descripción: 
+                <input type="text" name="description" required><br><br>
+                Palabras clave: 
+                <input type="text" name="keywords" required><br><br>
+                Autor: 
+                <input type="text" name="author" required><br><br>
+                Fecha creación:
+                <input type=date name="creation" required><br><br>
+                Archivo:
+                <input type="text" name="filename" required><br><br>
+                <input  type="submit" value="Registrar"/>
+            </form>
+        </div>
 
 
         <br><br><a href="login.jsp">Vuelve al Login</a>
         <br><br><a href="menu.jsp">Vuelve al Menú</a>
         <script>
-           /* let ses = window.sessionStorage;
-            if (ses.getItem('user') !== null) {
-                window.location.replace('menu.jsp');
-            }*/
+            /* let ses = window.sessionStorage;
+             if (ses.getItem('user') !== null) {
+             window.location.replace('menu.jsp');
+             }*/
             const registerImg = document.forms['registerImg'];
             registerImg.onsubmit = async (e) => {
                 e.preventDefault();
@@ -65,9 +67,9 @@
                     }
                 });
                 const res = await response.text();
-
+                const success = "Tu imagen ha sido registrada correctamente"
                 if (response.ok) {
-                    alert('correcto');
+                    document.getElementById('success').innerHTML = succes; 
                 } else
                     alert('Registro erroneo');
             };

@@ -9,7 +9,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -21,7 +20,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
-import static javax.ws.rs.HttpMethod.POST;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
@@ -104,8 +102,6 @@ public class GenericResource {
                 @FormDataParam("filename") String filename){
         return ""; 
     }*/
-    
-
     /**
      * POST method to modify an existing image
      *
@@ -120,7 +116,6 @@ public class GenericResource {
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
-
     public String modifyImage(@FormParam("id") String id,
             @FormParam("title") String title,
             @FormParam("description") String description,
@@ -253,7 +248,7 @@ public class GenericResource {
             System.err.println(ex.getMessage());
         }
 
-        return "";
+        return title;
     }
 
     /**
@@ -367,6 +362,72 @@ public class GenericResource {
         }
         return "";
 
+    }
+
+    /**
+     * POST method to login an existing user
+     *
+     * @param user
+     * @param password
+     * @return
+     */
+    @Path("loginUser")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String login(@FormParam("user") String user, @FormParam("password") String password) {
+        boolean logged = false;
+        try {
+            OurDao.startDB();
+            if (!OurDao.validatePassword(password) || !OurDao.validateUsername(user)) {
+                throw new IllegalArgumentException("Contraseña o usuario con formato invalido");
+            }
+            logged = OurDao.loggin(user, password);
+            OurDao.stopDB();
+        } catch (ClassNotFoundException | IllegalArgumentException | SQLException e) {
+            String msg = e.getMessage();
+            System.err.println(msg);
+            return "{\"success\": false, \"message\": \"" + msg + "\"}";
+        }
+        if (!logged) {
+            return "{\"success\": false, \"message\": \"El nombre o el usuario no son correctos\"}";
+        } else {
+            return "{\"success\": true, \"message\": \"Se ha iniciado sesión con exito\"}";
+        }
+    }
+
+    /**
+     * POST method to register a new user
+     *
+     * @param user
+     * @param password
+     * @return
+     */
+    @Path("registerUser")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String register(@FormParam("user") String user, @FormParam("password") String password) {
+        try {
+            OurDao.startDB();
+            if (!OurDao.validatePassword(password) || !OurDao.validateUsername(user)) {
+                throw new IllegalArgumentException("Contraseña o usuario con formato invalido");
+            }
+            OurDao.newuser(user, password);
+            OurDao.stopDB();
+        } catch (IllegalArgumentException e) {
+            String msg = e.getMessage();
+            System.err.println(msg);
+            return "{\"success\": false, \"message\": \"" + msg + "\"}";
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return "{\"success\": false, \"message\": \"Este usuario ya está registrado\"}";
+        } catch (ClassNotFoundException e) {
+            System.err.println(e.getMessage());
+            return "{\"success\": false, \"message\": \"Error interno\"}";
+        }
+
+        return "{\"success\": true, \"message\": \"Se ha registrado el usuario con exito\"}";
     }
 
     private static String ImageToString(Image img) {

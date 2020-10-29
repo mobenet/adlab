@@ -12,15 +12,20 @@
         <title>LogOut</title>
     </head>
     <body>
-        <% 
-            HttpSession ses = request.getSession(false);
-            if(ses.getAttribute("user")==null) response.sendRedirect("login.jsp");
-        %>
         <h1>Cerrar sesión</h1>
-        <form action="logout" method="POST">
-            ¿Seguro que quieres salir? <br>
-            <input type="Submit" value="Salir"/><br><br>
-            <a href="menu.jsp">Volver al menú principal</a>
-        </form>
+        ¿Seguro que quieres salir? <br>
+        <button onclick="logout()">Confirmar</button><br><br>
+        <a href="menu.jsp">Volver al menú principal</a>
+    
+    <script>
+        let ses = window.sessionStorage;
+        const user = ses.getItem('user');
+        if (user === null)
+            window.location.replace('login.jsp');
+        function logout(){
+            ses.removeItem('user');
+            window.location.replace('login.jsp');
+        }
+    </script>
     </body>
 </html>

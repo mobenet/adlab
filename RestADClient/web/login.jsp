@@ -13,26 +13,42 @@
         <title>Login</title>
     </head>
     <body>
-        <%
-            HttpSession ses = request.getSession(false);
-            if (ses.getAttribute("user") != null) {
-                response.sendRedirect("menu.jsp");
-            }
-            
-        String requestUrl = "http://localhost:8080/RestAD/webservices/generic";
-        %>
         <h1>Hola! Accede a tu cuenta</h1>
-        <form action="login" method="POST">
-            Usuario: <input type="text"     name="usuari" required/><br>
+        <form id="loginForm">
+            Usuario: <input type="text" name="user" required/><br>
             Contraseña: <input type="password" name="password" required/><br>
             <input type="Submit"   value="Acceder"/><br>
             <br><br>
-            <a href="registroUsuarios.jsp">Registrate aqui</a><br><br>
         </form>
+        <div id="errorMessage" style="color: red"></div>
+        <a href="registroUsuarios.jsp">Registrate aqui</a><br><br>
         <script>
-            function login(){
-                document.getElementsByName("usuari")
+            let ses = window.sessionStorage;
+            if (ses.getItem('user') !== null) {
+                window.location.replace('menu.jsp');
             }
+            const loginForm = document.forms['loginForm'];
+            loginForm.onsubmit = async (e) => {
+                e.preventDefault();
+                const url = 'http://localhost:8080/RestAD/webresources/generic/loginUser';
+                var data = new URLSearchParams();
+                const user = loginForm.elements['user'].value;
+                data.append('user', user);
+                data.append('password', loginForm.elements['password'].value);
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: data.toString(),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+                const res = await response.json();
+                if (res.success) {
+                    ses.setItem('user', user);
+                    window.location.replace('menu.jsp');
+                } else
+                    document.getElementById('errorMessage').innerHTML = res.message;
+            };
         </script>
     </body>
 </html>
