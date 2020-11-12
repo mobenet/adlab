@@ -15,3 +15,4 @@ nb-configuration.xml
 *.ear
 /RestAD/build/
 /RestADClient/build/
+*.zip

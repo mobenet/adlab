@@ -12,8 +12,9 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -35,6 +36,8 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("generic")
 public class GenericResource {
+
+    private final HashSet<String> set = new HashSet();
 
     @Context
     private UriInfo context;
@@ -104,12 +107,15 @@ public class GenericResource {
     /**
      * POST method to modify an existing image
      *
+     * @param id
      * @param title
      * @param description
      * @param keywords
      * @param author
      * @param crea_date
      * @return
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
      */
     @Path("modify")
     @POST
@@ -120,25 +126,30 @@ public class GenericResource {
             @FormParam("description") String description,
             @FormParam("keywords") String keywords,
             @FormParam("author") String author,
-            @FormParam("creation") String crea_date) {
+            @FormParam("creation") String crea_date) throws ClassNotFoundException, SQLException {
+
+        OurDao.startDB();
+        OurDao.enregistrarCanvi(title, description, keywords, author, crea_date, id);
+        OurDao.stopDB();
         return "";
     }
 
     /**
      * POST method to delete an existing image
      *
-     * @param title
-     * @param description
-     * @param keywords
-     * @param author
-     * @param crea_date
+     * @param id
      * @return
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
      */
     @Path("delete")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
-    public String deleteImage(@FormParam("id") String id) {
+    public String deleteImage(@FormParam("id") String id) throws ClassNotFoundException, SQLException {
+        OurDao.startDB();
+        OurDao.eliminar(id);
+        OurDao.stopDB();
         return "";
     }
 
@@ -158,7 +169,7 @@ public class GenericResource {
             OurDao.stopDB();
             res += "<table border=1>"
                     + "<tr>"
-                    +"<th>Id</th>"
+                    + "<th>Id</th>"
                     + "<th>Titulo</th>"
                     + "<th>Descripcion</th>"
                     + "<th>Palabras Clave</th>"
@@ -169,8 +180,8 @@ public class GenericResource {
                     + "</tr>";
 
             for (Image img : list) {
-                res += "<tr><td>"+img.getId()+"</td>"
-                        +"<td>" + img.getTitle() + "</td>"
+                res += "<tr><td>" + img.getId() + "</td>"
+                        + "<td>" + img.getTitle() + "</td>"
                         + "<td>" + img.getDescription() + "</td>"
                         + "<td>" + img.getKeywords() + "</td>"
                         + "<td class=autor>" + img.getAuthor() + "</td>"
@@ -258,7 +269,8 @@ public class GenericResource {
             @QueryParam("author") String author1,
             @QueryParam("keywords") String keywords1,
             @QueryParam("cdate") String cDate1) {
-        String resultat = "<table>\n"
+        //HashSet<String> set =new HashSet(); 
+        String resultat = "<table border=1>\n"
                 + "            <tr>\n"
                 + "                <th>Titulo</th>\n"
                 + "                <th>Descripcion</th>\n"
@@ -269,20 +281,25 @@ public class GenericResource {
                 + "                <th>Nombre del archivo</th>\n"
                 + "            </tr>";
 
-        if ((!"".equals(title1)) | (!" ".equals(title1))) {
-            resultat += searchByTitle(title1);
+        if ((!"".equals(title1)) & (!" ".equals(title1))) {
+            String g = searchByTitle(title1);
         }
-        if ((!"".equals(author1)) | (!" ".equals(author1))) {
-            resultat += searchByAuthor(author1);
+        if ((!"".equals(author1)) & (!" ".equals(author1))) {
+            String g = searchByAuthor(author1);
         }
-        if ((!"".equals(keywords1)) | (!" ".equals(keywords1))) {
-            resultat += searchByKeywords(keywords1);
+        if ((!"".equals(keywords1)) & (!" ".equals(keywords1))) {
+            String g = searchByKeywords(keywords1);
         }
-        if ((!"".equals(cDate1)) | (!" ".equals(cDate1))) {
-            resultat += searchByCreationDate(cDate1);
+        if ((!"".equals(cDate1)) & (!" ".equals(cDate1))) {
+            String g = searchByCreationDate(cDate1);
+        }
+        Iterator<String> i = set.iterator();
+        while (i.hasNext()) {
+            resultat += (i.next());
         }
 
         resultat += "</table>";
+        set.clear();
         return resultat;
     }
 
@@ -304,14 +321,13 @@ public class GenericResource {
             ResultSet rs;
             rs = OurDao.consultar(map);
             while (rs.next()) {
-                resultat += "<tr><td>" + rs.getString("TITLE") + "</td>"
+                set.add("<tr><td>" + rs.getString("TITLE") + "</td>"
                         + "<td>" + rs.getString("DESCRIPTION") + "</td>"
                         + "<td>" + rs.getString("KEYWORDS") + "</td>"
                         + "<td>" + rs.getString("AUTHOR") + "</td>"
                         + "<td>" + rs.getString("CREATION_DATE") + "</td>"
                         + "<td>" + rs.getString("STORAGE_DATE") + "</td>"
-                        + "<td><a href=image.jsp?name=" + rs.getString("FILENAME") + "&id=" + rs.getInt("ID") + ">" + rs.getString("FILENAME") + "</a></td></tr>";
-
+                        + "<td>" + rs.getString("FILENAME") + "</td></tr>");
             }
             OurDao.stopDB();
 
@@ -334,19 +350,18 @@ public class GenericResource {
         String resultat = "";
         try {
             HashMap<String, String> map = new HashMap<>();
-            map.put("title", "%" + creaDate + "%");
+            map.put("cdate", "%" + creaDate + "%");
             OurDao.startDB();
             ResultSet rs;
             rs = OurDao.consultar(map);
             while (rs.next()) {
-                resultat += "<tr><td>" + rs.getString("TITLE") + "</td>"
+                set.add("<tr><td>" + rs.getString("TITLE") + "</td>"
                         + "<td>" + rs.getString("DESCRIPTION") + "</td>"
                         + "<td>" + rs.getString("KEYWORDS") + "</td>"
                         + "<td>" + rs.getString("AUTHOR") + "</td>"
                         + "<td>" + rs.getString("CREATION_DATE") + "</td>"
                         + "<td>" + rs.getString("STORAGE_DATE") + "</td>"
-                        + "<td><a href=image.jsp?name=" + rs.getString("FILENAME") + "&id=" + rs.getInt("ID") + ">" + rs.getString("FILENAME") + "</a></td></tr>";
-
+                        + "<td>" + rs.getString("FILENAME") + "</td></tr>");
             }
             OurDao.stopDB();
 
@@ -369,18 +384,18 @@ public class GenericResource {
         String resultat = "";
         try {
             HashMap<String, String> map = new HashMap<>();
-            map.put("title", "%" + author + "%");
+            map.put("author", "%" + author + "%");
             OurDao.startDB();
             ResultSet rs;
             rs = OurDao.consultar(map);
             while (rs.next()) {
-                resultat += "<tr><td>" + rs.getString("TITLE") + "</td>"
+                set.add("<tr><td>" + rs.getString("TITLE") + "</td>"
                         + "<td>" + rs.getString("DESCRIPTION") + "</td>"
                         + "<td>" + rs.getString("KEYWORDS") + "</td>"
                         + "<td>" + rs.getString("AUTHOR") + "</td>"
                         + "<td>" + rs.getString("CREATION_DATE") + "</td>"
                         + "<td>" + rs.getString("STORAGE_DATE") + "</td>"
-                        + "<td><a href=image.jsp?name=" + rs.getString("FILENAME") + "&id=" + rs.getInt("ID") + ">" + rs.getString("FILENAME") + "</a></td></tr>";
+                        + "<td>" + rs.getString("FILENAME") + "</td></tr>");
 
             }
             OurDao.stopDB();
@@ -404,19 +419,18 @@ public class GenericResource {
         String resultat = "";
         try {
             HashMap<String, String> map = new HashMap<>();
-            map.put("title", "%" + keywords + "%");
+            map.put("keywords", "%" + keywords + "%");
             OurDao.startDB();
             ResultSet rs;
             rs = OurDao.consultar(map);
             while (rs.next()) {
-                resultat += "<tr><td>" + rs.getString("TITLE") + "</td>"
+                set.add("<tr><td>" + rs.getString("TITLE") + "</td>"
                         + "<td>" + rs.getString("DESCRIPTION") + "</td>"
                         + "<td>" + rs.getString("KEYWORDS") + "</td>"
                         + "<td>" + rs.getString("AUTHOR") + "</td>"
                         + "<td>" + rs.getString("CREATION_DATE") + "</td>"
                         + "<td>" + rs.getString("STORAGE_DATE") + "</td>"
-                        + "<td><a href=image.jsp?name=" + rs.getString("FILENAME") + "&id=" + rs.getInt("ID") + ">" + rs.getString("FILENAME") + "</a></td></tr>";
-
+                        + "<td>" + rs.getString("FILENAME") + "</td></tr>");
             }
             OurDao.stopDB();
 
@@ -515,7 +529,7 @@ public class GenericResource {
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e.getMessage());
         }
-        res+="]";
+        res += "]";
         return res;
     }
 

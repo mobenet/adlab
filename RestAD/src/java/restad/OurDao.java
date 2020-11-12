@@ -80,14 +80,16 @@ public class OurDao {
         return idI;
     }
 
-    public static boolean eliminar(int x) {
+    public static boolean eliminar(String x) {
 
         PreparedStatement statement;
         String query;
         try {
+            int idI = Integer.parseInt(x);
+
             query = "delete from image where ID = ?";
             statement = connection.prepareStatement(query);
-            statement.setInt(1, x);
+            statement.setInt(1, idI);
             statement.executeUpdate();
         } catch (SQLException e) {
             return false;
@@ -96,19 +98,20 @@ public class OurDao {
     }
 
     public static boolean enregistrarCanvi(String tituloU, String descU, String claveU,
-            String dataU, String fN, int id) throws SQLException {
+            String dataU, String fN, String id) throws SQLException {
         String query;
         PreparedStatement st;
         try {
             query = "UPDATE IMAGE SET TITLE = ?, DESCRIPTION=?, KEYWORDS=?, CREATION_DATE = ?, FILENAME = ? WHERE ID = ?";
 
+            int idI = Integer.parseInt(id);
             st = connection.prepareStatement(query);
             st.setString(1, tituloU);
             st.setString(2, descU);
             st.setString(3, claveU);
             st.setString(4, dataU);
             st.setString(5, fN);
-            st.setInt(6, id);
+            st.setInt(6, idI);
 
             st.executeUpdate();
 

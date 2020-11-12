@@ -11,15 +11,19 @@
         <title>Eliminar imagen</title>
     </head>
     <body>
-        <p id="success">Estás seguro que quieres eliminar tu imagen?</p>
-        <button id="acc" onclick="eliminar()">Aceptar</button>
-        <button id="canc" onclick="cancelar()">Cancelar</button>
+        <div id="success">
+            <p>Estás seguro que quieres eliminar tu imagen?</p>
+            <button id="acc" onclick="eliminar()">Aceptar</button>
+            <button id="canc" onclick="cancelar()">Cancelar</button>
+        </div>
+        <br><br><a href="menu.jsp">Vuelve al Menú</a>
+
         <script>
             let ses = window.sessionStorage;
             if (ses.getItem('user') === null) {
                 window.location.replace('login.jsp');
             }
-            var id = '7';
+            var id = '5';
             const exit = "Has elegido cancelar la operacion";
             const success = "Tu imagen ha sido eliminada correctamente";
             const message = document.getElementById('success');
@@ -39,12 +43,13 @@
                 });
                 const res = await response.text();
                 if (response.ok)
-                    message.innerHTML = success;
+                    document.getElementById('success').innerHTML = success;
+
             }
 
             function cancelar() {
-                window.location.href = 'menu.jsp';
-                message.innerHTML = exit;
+                //window.location.href = 'menu.jsp';
+                document.getElementById('success').innerHTML = exit;
             }
         </script>
     </body>
