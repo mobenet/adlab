@@ -26,20 +26,30 @@
                     let text = await response.text();
                     document.getElementById('listaImagenes').innerHTML = text;
                     const authors = document.getElementsByClassName('autor');
-                    Array.prototype.forEach.call(authors, function (author) {
-                        const name = author.innerHTML;
-                        if (name === user) {
-                            const tdFilename = author.parentElement.lastChild;
-                            const id = author.parentElement.firstChild.innerHTML;
-                            tdFilename.innerHTML = tdFilename.innerHTML + "<br><button onclick=\"callMethod('Modificar',"+id+")\">Modificar</button>"
-                                    +"<button onclick=\"callMethod('Eliminar',"+id+")\">Eliminar</button>";
+                    for (let author of authors) {
+                        const cols = author.parentElement.children;
+                        const image = {
+                            id: cols[0].innerHTML,
+                            title: cols[1].innerHTML,
+                            description: cols[2].innerHTML,
+                            keywords: cols[3].innerHTML,
+                            author: cols[4].innerHTML,
+                            creation_date: cols[5].innerHTML,
+                            storage_date: cols[6].innerHTML,
+                            filename: cols[7].innerHTML
                         }
-                    });
+                        if (name === user) {
+                            image.filename.innerHTML = image.filename.innerHTML + "<br><button onclick=\"callMethod('Modificar'," + image + ")\">Modificar</button>"
+                                    + "<button onclick=\"callMethod('Eliminar'," + image + ")\">Eliminar</button>";
+                        }
+                    }
                 }
-                function callMethod(method,id){
-                    ses.setItem('imageId',id);
-                    if(method === 'Modificar') window.location.href = 'modificarImagen.jsp';
-                    else window.location.href = 'eliminarImagen.jsp';
+                function callMethod(method, img) {
+                    ses.setItem('image', img);
+                    if (method === 'Modificar')
+                        window.location.href = 'modificarImagen.jsp';
+                    else
+                        window.location.href = 'eliminarImagen.jsp';
                 }
             }
         </script>
