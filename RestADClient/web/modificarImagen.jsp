@@ -24,7 +24,7 @@
                     <th>Nombre del archivo</th>
                 </tr>
             </table><br><br>
-            
+
             <form id="modifyImg">
                 <h1>Modifica tu imagen como deseess</h1>
                 Titulo: 
@@ -49,34 +49,23 @@
             if (ses.getItem('user') === null) {
                 window.location.replace('menu.jsp');
             }
-            var id = ses.getItem('imageId');
+            const image = JSON.parse(ses.getItem('image'));
             const modifyImg = document.forms['modifyImg'];
+            modifyImg.title.value = image.title;
+            modifyImg.description.value = image.description;
+            modifyImg.keywords.value = image.keywords;
+            modifyImg.creation.value = image.creation_date;
             modifyImg.onsubmit = async (e) => {
                 e.preventDefault();
                 //Validate!!
                 const url = 'http://localhost:8080/RestAD/webresources/generic/modify/';
                 var data = new URLSearchParams();
-                data.append('id', id);
-                if (modifyImg.elements['title'].value === "")
-                    data.append('title', 'el mismo titulo que antes');
-                else
-                    data.append('title', modifyImg.elements['title'].value);
-                
-                if (modifyImg.elements['description'].value === "")
-                    data.append('description', 'la misma desc que antes');
-                else
-                    data.append('description', modifyImg.elements['description'].value);
-
-                if (modifyImg.elements['keywords'].value === "")
-                    data.append('keywords', 'la misma key que antes');
-                else
-                    data.append('keywords', modifyImg.elements['keywords'].value);
-                data.append('author', modifyImg.elements['author'].value);
-
-                if (modifyImg.elements['creation'].value === "")
-                    data.append('creation', 'la misma fecha que antes');
-                else
-                    data.append('creation', modifyImg.elements['creation'].value);
+                data.append('id', image.id);
+                data.append('title', modifyImg.title.value);
+                data.append('description', modifyImg.description.value);
+                data.append('keywords', modifyImg.keywords.value);
+                data.append('author', modifyImg.author.value);
+                data.append('creation', modifyImg.creation.value);
 
 
                 //data.append('filename', modifyImg.elements['filename'].value);

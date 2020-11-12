@@ -50,7 +50,7 @@
                     }
                 }
                 function callMethod(method, img) {
-                    ses.setItem('image', img);
+                    ses.setItem('image', JSON.stringify(img));
                     if (method === 'Modificar')
                         window.location.href = 'modificarImagen.jsp';
                     else
