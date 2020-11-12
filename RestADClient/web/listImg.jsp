@@ -17,18 +17,19 @@
         <script>
             let ses = window.sessionStorage;
             const user = ses.getItem('user');
+            const imageArr = [];
             if (user === null)
                 window.location.replace('login.jsp');
             else {
                 window.onload = async() => {
+
                     const url = "http://localhost:8080/RestAD/webresources/generic/list";
                     const response = await fetch(url, {method: 'GET'});
-                    let text = await response.text();
-                    document.getElementById('listaImagenes').innerHTML = text;
-                    const authors = document.getElementsByClassName('autor');
-                    const imageArr = [];
-                    for (let author of authors) {
-                        const cols = author.parentElement.children;
+                    document.getElementById('listaImagenes').innerHTML = await response.text()
+                    const dataList = document.getElementsByClassName('imageData');
+
+                    for (let data of dataList) {
+                        const cols = data.children;
                         const image = {
                             id: cols[0].innerHTML,
                             title: cols[1].innerHTML,
@@ -38,12 +39,13 @@
                             creation_date: cols[5].innerHTML,
                             storage_date: cols[6].innerHTML,
                             filename: cols[7].innerHTML
-                        }
-                        imageArr.append(image);
+                        };
+                        imageArr.push(image);
                         console.log(image);
                         if (image.author === user) {
-                            cols[7].innerHTML = image.filename + "<br><button onclick=\"callMethod('Modificar',imageArr["+image.id+"])\">Modificar</button>"
-                                    + "<button onclick=\"callMethod('Eliminar',imageArr["+image.id+"])\">Eliminar</button>";
+                            const current = imageArr.length - 1;
+                            cols[7].innerHTML = image.filename + "<br><button onclick=\"callMethod('Modificar',imageArr[" + current + "])\">Modificar</button>"
+                                    + "<button onclick=\"callMethod('Eliminar',imageArr[" + current + "])\">Eliminar</button>";
                         }
                     }
                 }

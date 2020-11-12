@@ -13,6 +13,5 @@ nb-configuration.xml
 *.class
 *.war
 *.ear
-/RestAD/build/
-/RestADClient/build/
 *.zip
+private.properties

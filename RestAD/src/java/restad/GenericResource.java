@@ -180,11 +180,11 @@ public class GenericResource {
                     + "</tr>";
 
             for (Image img : list) {
-                res += "<tr><td>" + img.getId() + "</td>"
+                res += "<tr class=imageData><td>" + img.getId() + "</td>"
                         + "<td>" + img.getTitle() + "</td>"
                         + "<td>" + img.getDescription() + "</td>"
                         + "<td>" + img.getKeywords() + "</td>"
-                        + "<td class=autor>" + img.getAuthor() + "</td>"
+                        + "<td>" + img.getAuthor() + "</td>"
                         + "<td>" + img.getCreationDate() + "</td>"
                         + "<td>" + img.getStorageDate() + "</td>"
                         + "<td>" + img.getFileName() + "</td>";
