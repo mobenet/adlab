@@ -65,14 +65,6 @@ public class registrarImagen extends HttpServlet {
             throw new FileNotFoundException("No has especificado el archivo a subir");
         }
 
-        String basepath = registrarImagen.class
-                .getProtectionDomain()
-                .getCodeSource()
-                .getLocation()
-                .getPath();
-        basepath = basepath.substring(0, basepath.lastIndexOf("ImageWSServletClient"));
-        final String path = basepath + "ImageWSServletClient/web/images";
-
         Image img = new Image();
         img.setTitle(request.getParameter("titulo"));
         img.setAuthor(request.getParameter("author"));
@@ -85,7 +77,7 @@ public class registrarImagen extends HttpServlet {
             response.sendRedirect("error.jsp");
             System.err.println("No se ha podido leer la imagen correctamente");
         } else img.setBytes(imageBytes);
-        int id = registerImage(img);
+        registerImage(img);
         try (PrintWriter out = response.getWriter()) {
             out.println("<p>Se ha registrado la imagen exitosamente</p>");
             out.println("<a href=\"menu.jsp\">Vuelve al Menu</a>");
