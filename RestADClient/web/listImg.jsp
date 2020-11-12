@@ -26,6 +26,7 @@
                     let text = await response.text();
                     document.getElementById('listaImagenes').innerHTML = text;
                     const authors = document.getElementsByClassName('autor');
+                    const imageArr = [];
                     for (let author of authors) {
                         const cols = author.parentElement.children;
                         const image = {
@@ -38,9 +39,11 @@
                             storage_date: cols[6].innerHTML,
                             filename: cols[7].innerHTML
                         }
-                        if (name === user) {
-                            image.filename.innerHTML = image.filename.innerHTML + "<br><button onclick=\"callMethod('Modificar'," + image + ")\">Modificar</button>"
-                                    + "<button onclick=\"callMethod('Eliminar'," + image + ")\">Eliminar</button>";
+                        imageArr.append(image);
+                        console.log(image);
+                        if (image.author === user) {
+                            cols[7].innerHTML = image.filename + "<br><button onclick=\"callMethod('Modificar',imageArr["+image.id+"])\">Modificar</button>"
+                                    + "<button onclick=\"callMethod('Eliminar',imageArr["+image.id+"])\">Eliminar</button>";
                         }
                     }
                 }
