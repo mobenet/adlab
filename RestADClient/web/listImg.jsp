@@ -25,7 +25,7 @@
 
                     const url = "http://localhost:8080/RestAD/webresources/generic/list";
                     const response = await fetch(url, {method: 'GET'});
-                    document.getElementById('listaImagenes').innerHTML = await response.text()
+                    document.getElementById('listaImagenes').innerHTML = await response.text();
                     const dataList = document.getElementsByClassName('imageData');
 
                     for (let data of dataList) {
@@ -41,10 +41,10 @@
                             filename: cols[7].innerHTML
                         };
                         imageArr.push(image);
-                        console.log(image);
+                        cols[7].innerHTML = '<a href=image.jsp?id='+image.id+'&name='+image.filename+'>'+image.filename+'</a>';
                         if (image.author === user) {
                             const current = imageArr.length - 1;
-                            cols[7].innerHTML = image.filename + "<br><button onclick=\"callMethod('Modificar',imageArr[" + current + "])\">Modificar</button>"
+                            cols[7].innerHTML += "<br><button onclick=\"callMethod('Modificar',imageArr[" + current + "])\">Modificar</button>"
                                     + "<button onclick=\"callMethod('Eliminar',imageArr[" + current + "])\">Eliminar</button>";
                         }
                     }

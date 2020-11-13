@@ -31,6 +31,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
@@ -94,7 +95,7 @@ public class GenericResource {
             @FormDataParam("file") InputStream is) throws Exception {
         String storage_date = LocalDate.now().toString();
         OurDao.startDB();
-        Image image = new Image(title,author,description,keywords,crea_date,storage_date,filename);
+        Image image = new Image(title, author, description, keywords, crea_date, storage_date, filename);
         image.setId(OurDao.enregistrar(title, description, keywords, author, crea_date, storage_date, filename));
         String basepath = GenericResource.class
                 .getProtectionDomain()
@@ -105,10 +106,10 @@ public class GenericResource {
         basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
         final String path = basepath + projectName + "/web/images/";
         File newdir = new File(path);
-        if(!newdir.exists()){
+        if (!newdir.exists()) {
             newdir.mkdir();
         }
-        Files.copy(is, (new File(path+image.getImageName())).toPath(),StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(is, (new File(path + image.getImageName())).toPath(), StandardCopyOption.REPLACE_EXISTING);
         OurDao.stopDB();
         return "<html><h1>HelloBitch</h1></html>";
     }
@@ -273,6 +274,59 @@ public class GenericResource {
             return null;
         }
         return ImageToString(tmp);
+    }
+
+    /**
+     * GET method to download images by id
+     *
+     * @param id
+     * @return
+     */
+    @Path("download/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response downloadByID(@PathParam("id") int id) {
+        Image tmp = new Image();
+        try {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("id", String.valueOf(id));
+            OurDao.startDB();
+            ResultSet res;
+            res = OurDao.consultar(map);
+            if (res == null) {
+                return Response.noContent().build();
+            }
+            if (res.next()) {
+                tmp.setId(res.getInt("ID"));
+                tmp.setTitle(res.getString("TITLE"));
+                tmp.setAuthor(res.getString("AUTHOR"));
+                tmp.setDescription(res.getString("DESCRIPTION"));
+                tmp.setKeywords(res.getString("KEYWORDS"));
+                tmp.setCreationDate(res.getString("CREATION_DATE"));
+                tmp.setStorageDate(res.getString("STORAGE_DATE"));
+                tmp.setFileName(res.getString("FILENAME"));
+            }
+            OurDao.stopDB();
+
+            //Leer imagen del sistema de ficheros
+            String basepath = GenericResource.class
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath();
+            String projectName = "RestAD";
+            basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
+            final String path = basepath + projectName + "/web/images/";
+            File imageFile = new File(path + tmp.getImageName());
+            return Response
+                    .ok(imageFile, MediaType.APPLICATION_OCTET_STREAM)
+                    .header("Content-Disposition", "attachment; filename=\"" + imageFile.getName()+"\"")
+                    .build();
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.err.println(ex.getMessage());
+            return Response.serverError().build();
+        }
     }
 
     /**
