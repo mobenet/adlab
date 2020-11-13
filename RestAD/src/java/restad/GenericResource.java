@@ -73,6 +73,8 @@ public class GenericResource {
      * @param crea_date
      * @param filename
      * @return
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
      */
     @Path("register")
     @POST

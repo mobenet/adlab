@@ -34,7 +34,7 @@
                 Palabras clave: 
                 <input type="text" name="keywords" ><br><br>
                 Autor: 
-                <input type="text" name="author" value="author"> <br><br>
+                <input type="text" name="author"> <br><br>
 
                 Fecha creación:
                 <input type=date name="creation" ><br><br>

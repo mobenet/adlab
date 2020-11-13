@@ -27,7 +27,7 @@
                 Fecha creación:
                 <input type=date name="creation" required><br><br>
                 Archivo:
-                <input type="text" name="filename" required><br><br>
+                <input type="file" name="filename" required><br><br>
                 <input  type="submit" value="Registrar"/>
             </form>
         </div>
@@ -50,15 +50,15 @@
                 const registerImg = document.forms['registerImg'];
                 registerImg.onsubmit = async (e) => {
                     e.preventDefault();
-                    //Validate!!
                     const url = baseurl+'register/';
-                    var data = new URLSearchParams();
-                    data.append('title', registerImg.elements['title'].value);
-                    data.append('description', registerImg.elements['description'].value);
-                    data.append('keywords', registerImg.elements['keywords'].value);
-                    data.append('author', registerImg.elements['author'].value);
-                    data.append('creation', registerImg.elements['creation'].value);
-                    data.append('filename', registerImg.elements['filename'].value);
+                    const data = new URLSearchParams();
+                    data.append('title', registerImg.title.value);
+                    data.append('description', registerImg.description.value);
+                    data.append('keywords', registerImg.keywords.value);
+                    data.append('author', registerImg.author.value);
+                    data.append('creation', registerImg.creation.value);
+                    const file = registerImg.filename.files[0];
+                    data.append('filename', file.name);
                     const response = await fetch(url, {
                         method: 'POST',
                         body: data.toString(),
