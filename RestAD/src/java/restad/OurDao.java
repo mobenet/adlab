@@ -97,25 +97,51 @@ public class OurDao {
         return true;
     }
 
-    public static boolean enregistrarCanvi(String tituloU, String descU, String claveU,
-            String dataU, String fN, String id) throws SQLException {
+    public static boolean enregistrarCanvi(String id, String title, String description,
+            String keywords, String author, String creationDate, String filename) throws SQLException {
         String query;
         PreparedStatement st;
         try {
-            query = "UPDATE IMAGE SET TITLE = ?, DESCRIPTION=?, KEYWORDS=?, CREATION_DATE = ?, FILENAME = ? WHERE ID = ?";
-
-            int idI = Integer.parseInt(id);
+            query = "UPDATE IMAGE SET ";
+            ArrayList<String> cols = new ArrayList();
+            if (title != null) {
+                query += " TITLE = ?,";
+                cols.add(title);
+            }
+            if (description != null) {
+                query += " DESCRIPTION = ?,";
+                cols.add(description);
+            }
+            if (keywords != null) {
+                query += " KEYWORDS = ?,";
+                cols.add(keywords);
+            }
+            if (author != null) {
+                query += " AUTHOR = ?,";
+                cols.add(author);
+            }
+            if (creationDate != null) {
+                query += " CREATION_DATE = ?,";
+                cols.add(creationDate);
+            }
+            if (filename != null) {
+                query += " FILENAME = ?,";
+                cols.add(filename);
+            }
+            if (cols.isEmpty()) {
+                return false;
+            }
+            query = query.substring(0, query.length() - 1) + " WHERE ID = ?";
             st = connection.prepareStatement(query);
-            st.setString(1, tituloU);
-            st.setString(2, descU);
-            st.setString(3, claveU);
-            st.setString(4, dataU);
-            st.setString(5, fN);
-            st.setInt(6, idI);
-
+            for (int i = 0; i < cols.size(); i++) {
+                st.setString(i + 1, cols.get(i));
+            }
+            //System.err.println(cols.toString() + ' ' + id);
+            //System.err.println(query);
+            st.setInt(cols.size()+1, Integer.parseInt(id));
             st.executeUpdate();
-
         } catch (SQLException e) {
+            System.err.println(e.getMessage());
             return false;
         }
         return true;
@@ -156,7 +182,7 @@ public class OurDao {
         }
         PreparedStatement statement = connection.prepareStatement(query);
         int i = 1;
-        for(String v: consultas.values()){
+        for (String v : consultas.values()) {
             statement.setString(i, v);
             i++;
         }

@@ -131,7 +131,7 @@ public class GenericResource {
             @FormParam("creation") String crea_date) throws ClassNotFoundException, SQLException {
 
         OurDao.startDB();
-        OurDao.enregistrarCanvi(title, description, keywords, author, crea_date, id);
+        OurDao.enregistrarCanvi(id, title, description, keywords, author, crea_date, null);
         OurDao.stopDB();
         return "";
     }
