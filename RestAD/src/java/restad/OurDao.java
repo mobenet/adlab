@@ -136,8 +136,6 @@ public class OurDao {
             for (int i = 0; i < cols.size(); i++) {
                 st.setString(i + 1, cols.get(i));
             }
-            //System.err.println(cols.toString() + ' ' + id);
-            //System.err.println(query);
             st.setInt(cols.size()+1, Integer.parseInt(id));
             st.executeUpdate();
         } catch (SQLException e) {

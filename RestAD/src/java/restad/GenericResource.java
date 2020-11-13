@@ -9,6 +9,9 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -28,6 +31,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  * REST Web Service
@@ -72,23 +76,39 @@ public class GenericResource {
      * @param author
      * @param crea_date
      * @param filename
+     * @param is
      * @return
      * @throws java.lang.ClassNotFoundException
      * @throws java.sql.SQLException
      */
     @Path("register")
     @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_HTML)
-    public String registerImage(@FormParam("title") String title,
-            @FormParam("description") String description,
-            @FormParam("keywords") String keywords,
-            @FormParam("author") String author,
-            @FormParam("creation") String crea_date,
-            @FormParam("filename") String filename) throws ClassNotFoundException, SQLException {
+    public String registerImage(@FormDataParam("title") String title,
+            @FormDataParam("description") String description,
+            @FormDataParam("keywords") String keywords,
+            @FormDataParam("author") String author,
+            @FormDataParam("creation") String crea_date,
+            @FormDataParam("filename") String filename,
+            @FormDataParam("file") InputStream is) throws Exception {
         String storage_date = LocalDate.now().toString();
         OurDao.startDB();
-        OurDao.enregistrar(title, description, keywords, author, crea_date, storage_date, filename);
+        Image image = new Image(title,author,description,keywords,crea_date,storage_date,filename);
+        image.setId(OurDao.enregistrar(title, description, keywords, author, crea_date, storage_date, filename));
+        String basepath = GenericResource.class
+                .getProtectionDomain()
+                .getCodeSource()
+                .getLocation()
+                .getPath();
+        String projectName = "RestAD";
+        basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
+        final String path = basepath + projectName + "/web/images/";
+        File newdir = new File(path);
+        if(!newdir.exists()){
+            newdir.mkdir();
+        }
+        Files.copy(is, (new File(path+image.getImageName())).toPath(),StandardCopyOption.REPLACE_EXISTING);
         OurDao.stopDB();
         return "<html><h1>HelloBitch</h1></html>";
     }

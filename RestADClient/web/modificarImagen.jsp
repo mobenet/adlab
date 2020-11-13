@@ -14,16 +14,6 @@
     <body>
 
         <div id="success">
-            <table border="1">
-                <tr>
-                    <th>Titulo</th>
-                    <th>Descripcion</th>
-                    <th>Palabras Clave</th>
-                    <th>Autor</th>
-                    <th>Fecha de creacion</th>
-                    <th>Nombre del archivo</th>
-                </tr>
-            </table><br><br>
 
             <form id="modifyImg">
                 <h1>Modifica tu imagen como deseess</h1>
@@ -88,8 +78,7 @@
                     const success = "Tu imagen ha sido modificada correctamente"
                     if (response.ok) {
                         document.getElementById('success').innerHTML = success;
-                    } else
-                        alert('Modificacion erronea');
+                    } else window.location.replace('error.jsp');
                 };
             }
 

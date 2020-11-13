@@ -27,7 +27,7 @@
                 Fecha creación:
                 <input type=date name="creation" required><br><br>
                 Archivo:
-                <input type="file" name="filename" required><br><br>
+                <input type="file" name="file" required><br><br>
                 <input  type="submit" value="Registrar"/>
             </form>
         </div>
@@ -51,20 +51,12 @@
                 registerImg.onsubmit = async (e) => {
                     e.preventDefault();
                     const url = baseurl+'register/';
-                    const data = new URLSearchParams();
-                    data.append('title', registerImg.title.value);
-                    data.append('description', registerImg.description.value);
-                    data.append('keywords', registerImg.keywords.value);
-                    data.append('author', registerImg.author.value);
-                    data.append('creation', registerImg.creation.value);
-                    const file = registerImg.filename.files[0];
-                    data.append('filename', file.name);
+                    const data = new FormData(registerImg);
+                    const filename = registerImg.file.files[0].name;
+                    data.append('filename',filename);
                     const response = await fetch(url, {
                         method: 'POST',
-                        body: data.toString(),
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        }
+                        body: data
                     });
                     const res = await response.text();
                     const success = "Tu imagen ha sido registrada correctamente"
