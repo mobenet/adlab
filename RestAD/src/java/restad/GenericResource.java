@@ -276,7 +276,7 @@ public class GenericResource {
     }
 
     /**
-     * GET method to search images by title
+     * GET method to search images 
      *
      * @param title1
      * @param author1
@@ -291,9 +291,9 @@ public class GenericResource {
             @QueryParam("author") String author1,
             @QueryParam("keywords") String keywords1,
             @QueryParam("cdate") String cDate1) {
-        //HashSet<String> set =new HashSet(); 
         String resultat = "<table border=1>\n"
                 + "            <tr>\n"
+                + "                <th>Id</th>"
                 + "                <th>Titulo</th>\n"
                 + "                <th>Descripcion</th>\n"
                 + "                <th>Palabras Clave</th>\n"
@@ -319,7 +319,6 @@ public class GenericResource {
         while (i.hasNext()) {
             resultat += (i.next());
         }
-
         resultat += "</table>";
         set.clear();
         return resultat;
@@ -343,7 +342,8 @@ public class GenericResource {
             ResultSet rs;
             rs = OurDao.consultar(map);
             while (rs.next()) {
-                set.add("<tr><td>" + rs.getString("TITLE") + "</td>"
+                set.add("<tr  class=imgD><td>" + rs.getString("ID") + "</td>"
+                        + "<td>" + rs.getString("TITLE") + "</td>"
                         + "<td>" + rs.getString("DESCRIPTION") + "</td>"
                         + "<td>" + rs.getString("KEYWORDS") + "</td>"
                         + "<td>" + rs.getString("AUTHOR") + "</td>"
@@ -377,7 +377,8 @@ public class GenericResource {
             ResultSet rs;
             rs = OurDao.consultar(map);
             while (rs.next()) {
-                set.add("<tr><td>" + rs.getString("TITLE") + "</td>"
+                set.add("<tr  class=imgD><td>" + rs.getString("ID") + "</td>"
+                        + "<td>" + rs.getString("TITLE") + "</td>"
                         + "<td>" + rs.getString("DESCRIPTION") + "</td>"
                         + "<td>" + rs.getString("KEYWORDS") + "</td>"
                         + "<td>" + rs.getString("AUTHOR") + "</td>"
@@ -411,7 +412,8 @@ public class GenericResource {
             ResultSet rs;
             rs = OurDao.consultar(map);
             while (rs.next()) {
-                set.add("<tr><td>" + rs.getString("TITLE") + "</td>"
+                set.add("<tr  class=imgD><td>" + rs.getString("ID") + "</td>"
+                        + "<td>" + rs.getString("TITLE") + "</td>"
                         + "<td>" + rs.getString("DESCRIPTION") + "</td>"
                         + "<td>" + rs.getString("KEYWORDS") + "</td>"
                         + "<td>" + rs.getString("AUTHOR") + "</td>"
@@ -446,7 +448,8 @@ public class GenericResource {
             ResultSet rs;
             rs = OurDao.consultar(map);
             while (rs.next()) {
-                set.add("<tr><td>" + rs.getString("TITLE") + "</td>"
+                set.add("<tr  class=imgD><td>" + rs.getString("ID") + "</td>"
+                        + "<td>" + rs.getString("TITLE") + "</td>"
                         + "<td>" + rs.getString("DESCRIPTION") + "</td>"
                         + "<td>" + rs.getString("KEYWORDS") + "</td>"
                         + "<td>" + rs.getString("AUTHOR") + "</td>"

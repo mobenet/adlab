@@ -177,8 +177,8 @@ public class ImageWS {
         try {
             //TODO write your implementation code here:
             HashMap<String, String> map = new HashMap<>();
-            map.put("id", String.valueOf(id));//controlar el sql injection
-            OurDao.startDB(); // els stopDB shan de posar? 
+            map.put("id", String.valueOf(id));
+            OurDao.startDB(); 
             ResultSet res;
             res = OurDao.consultar(map);
             if (res == null) {
