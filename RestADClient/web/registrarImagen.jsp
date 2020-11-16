@@ -58,12 +58,13 @@
                         method: 'POST',
                         body: data
                     });
-                    const res = await response.text();
                     const success = "Tu imagen ha sido registrada correctamente"
                     if (response.ok) {
                         document.getElementById('success').innerHTML = success;
-                    } else
-                        alert('Registro erroneo');
+                    } else {
+                        ses.setItem('errorMessage',"Error interno del servidor");
+                        window.location.replace('error.jsp')
+                    }
                 };
             }
         </script>

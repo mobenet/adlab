@@ -86,32 +86,36 @@ public class GenericResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_HTML)
-    public String registerImage(@FormDataParam("title") String title,
+    public Response registerImage(@FormDataParam("title") String title,
             @FormDataParam("description") String description,
             @FormDataParam("keywords") String keywords,
             @FormDataParam("author") String author,
             @FormDataParam("creation") String crea_date,
             @FormDataParam("filename") String filename,
-            @FormDataParam("file") InputStream is) throws Exception {
+            @FormDataParam("file") InputStream is) {
         String storage_date = LocalDate.now().toString();
-        OurDao.startDB();
-        Image image = new Image(title, author, description, keywords, crea_date, storage_date, filename);
-        image.setId(OurDao.enregistrar(title, description, keywords, author, crea_date, storage_date, filename));
-        String basepath = GenericResource.class
-                .getProtectionDomain()
-                .getCodeSource()
-                .getLocation()
-                .getPath();
-        String projectName = "RestAD";
-        basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
-        final String path = basepath + projectName + "/web/images/";
-        File newdir = new File(path);
-        if (!newdir.exists()) {
-            newdir.mkdir();
+        try {
+            OurDao.startDB();
+            Image image = new Image(title, author, description, keywords, crea_date, storage_date, filename);
+            image.setId(OurDao.enregistrar(title, description, keywords, author, crea_date, storage_date, filename));
+            String basepath = GenericResource.class
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath();
+            String projectName = "RestAD";
+            basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
+            final String path = basepath + projectName + "/web/images/";
+            File newdir = new File(path);
+            if (!newdir.exists()) {
+                newdir.mkdir();
+            }
+            Files.copy(is, (new File(path + image.getImageName())).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            OurDao.stopDB();
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            return Response.serverError().build();
         }
-        Files.copy(is, (new File(path + image.getImageName())).toPath(), StandardCopyOption.REPLACE_EXISTING);
-        OurDao.stopDB();
-        return "<html><h1>HelloBitch</h1></html>";
+        return Response.ok().build();
     }
 
     /**
@@ -320,7 +324,7 @@ public class GenericResource {
             File imageFile = new File(path + tmp.getImageName());
             return Response
                     .ok(imageFile, MediaType.APPLICATION_OCTET_STREAM)
-                    .header("Content-Disposition", "attachment; filename=\"" + imageFile.getName()+"\"")
+                    .header("Content-Disposition", "attachment; filename=\"" + imageFile.getName() + "\"")
                     .build();
 
         } catch (ClassNotFoundException | SQLException ex) {
