@@ -22,7 +22,6 @@
                 window.location.replace('login.jsp');
             else {
                 window.onload = async() => {
-
                     const url = "http://localhost:8080/RestAD/webresources/generic/list";
                     const response = await fetch(url, {method: 'GET'});
                     document.getElementById('listaImagenes').innerHTML = await response.text();

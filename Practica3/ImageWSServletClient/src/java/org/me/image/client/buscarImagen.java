@@ -51,50 +51,33 @@ public class buscarImagen extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-
         HttpSession ses = request.getSession(false);
         String user = (String) ses.getAttribute("user");
         if (user == null) {
             response.sendRedirect("login.jsp");
         } else {
             try (PrintWriter out = response.getWriter()) {
-
                 String author = request.getParameter("author");
                 String creationDate = request.getParameter("cdate");
                 String keywords = request.getParameter("keywords");
                 String title = request.getParameter("title");
                 ArrayList<List<Object>> searchArray = new ArrayList<>();
-                if (title != null) {
-                    searchArray.add(searchbyTitle(title));
-                }
-                if (keywords != null) {
-                    searchArray.add(searchbyKeywords(keywords));
-                }
-                if (author != null) {
-                    searchArray.add(searchbyAuthor(author));
-                }
-                if (creationDate != null) {
-                    searchArray.add(searchbyCreaDate(creationDate));
-                }
-
+                if (title != null) searchArray.add(searchbyTitle(title));
+                if (keywords != null) searchArray.add(searchbyKeywords(keywords));
+                if (author != null) searchArray.add(searchbyAuthor(author));
+                if (creationDate != null)  searchArray.add(searchbyCreaDate(creationDate));
                 List<Image> searchResult = combineSearch(searchArray);
-
-                //afageixo el % per buscar patrons, paraules dintre de paraules
                 if (searchResult.isEmpty()) {
-
                     out.println("No hay resultados con las entradas correspondientes");
                     out.print("<br><br>");
-                    //boton menu
                     String resp = "<a href=\"menu.jsp\">Menu principal</a>";
                     out.println(resp);
                     out.print("<br><br>");
                     resp = "<a href=\"buscarImagen.jsp\">Buscar una nueva imagen</a>";
-                    //boton busqueda
                     out.println(resp);
                     out.print("<br><br>");
                 } else {
                     out.println("Listado de imagenes: <br>");
-
                     out.println("<table>\n"
                             + "            <tr>\n"
                             + "                <th>Titulo</th>\n"

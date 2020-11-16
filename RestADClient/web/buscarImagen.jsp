@@ -20,9 +20,8 @@
             <input type="text" name="title"/><br><br>
 
             Autor: 
-            <select id="authors" name="author">
-            </select>
-            <br><br>
+            <select id="authors" name="author"></select><br><br>
+            
             Palabras clave: 
             <input type="text" name="keywords"/><br><br>
 
@@ -33,9 +32,11 @@
         </form>                             
         <script>
             let ses = window.sessionStorage;
-            if (ses.getItem('user') === null) {
-                window.location.replace('login.jsp');
-            } else {
+            const user = ses.getItem('user');
+            const imageArr = [];
+            if (user === null) window.location.replace('login.jsp');
+            else {
+                
                 const baseurl = 'http://localhost:8080/RestAD/webresources/generic/';
 
                 window.onload = async() => {
@@ -50,7 +51,7 @@
                 formimage.onsubmit = async (e) => {
                     e.preventDefault();
                     //Validate!!
-                    let url = baseurl+'searchcombi?'
+                    let url = baseurl+'searchcombi?';
                     const queryString = new URLSearchParams(new FormData(formimage)).toString();
                     url+=queryString;
                     const response = await fetch(url, {
@@ -58,8 +59,40 @@
                     });
                     const res = await response.text();
                     document.getElementById("tablaimagen").innerHTML = res;
-                };
-            }
+           
+                    const dataList = document.getElementsByClassName('imgD');
+                    for (let data of dataList) {
+                        const cols = data.children;
+                        const image = {
+                            id: cols[0].innerHTML,
+                            title: cols[1].innerHTML,
+                            description: cols[2].innerHTML,
+                            keywords: cols[3].innerHTML,
+                            author: cols[4].innerHTML,
+                            creation_date: cols[5].innerHTML,
+                            storage_date: cols[6].innerHTML,
+                            filename: cols[7].innerHTML
+                        };
+                        imageArr.push(image);
+                        console.log(image);
+                        if (image.author === user) {
+                            const current = imageArr.length - 1;
+                            cols[7].innerHTML = image.filename + "<br><button onclick=\"callMethod('Modificar',imageArr[" + current + "])\">Modificar</button>"
+                                    + "<button onclick=\"callMethod('Eliminar',imageArr[" + current + "])\">Eliminar</button>";
+                        }
+                    }
+                }
+                    function callMethod(method, img) {
+                        ses.setItem('image', JSON.stringify(img));
+                        if (method === 'Modificar')
+                            window.location.href = 'modificarImagen.jsp';
+                        else
+                            window.location.href = 'eliminarImagen.jsp';
+                    }
+                }
+                
+                
+            
         </script>
         <div id="tablaimagen"></div>
 

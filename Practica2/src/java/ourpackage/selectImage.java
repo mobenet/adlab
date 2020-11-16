@@ -31,7 +31,6 @@ public class selectImage extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         response.setContentType("text/html;charset=UTF-8");
         HttpSession ses = request.getSession(false);
         if(ses.getAttribute("user") == null) response.sendRedirect("login.jsp");
@@ -47,7 +46,6 @@ public class selectImage extends HttpServlet {
     }
     
     public static String getImageName(int id, String filename){
-        
         if(filename==null || filename.isEmpty()) return null;
         String[] splitted = filename.split("\\.");
         if(splitted.length != 2){
