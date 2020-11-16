@@ -24,7 +24,7 @@
         <a href="login.jsp">Volver</a>
         <script>
             let ses = window.sessionStorage;
-            if(ses.getItem('user') !== null){
+            if (ses.getItem('user') !== null) {
                 window.location.replace('menu.jsp');
             }
             const registerForm = document.forms['registerForm'];
@@ -48,7 +48,7 @@
                     });
                     const res = await response.json();
                     if (res.success) {
-                        ses.setItem('user',user);
+                        ses.setItem('user', user);
                         window.location.replace('menu.jsp');
                     } else
                         document.getElementById('errorMessage').innerHTML = res.message;

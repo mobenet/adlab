@@ -79,8 +79,6 @@ public class GenericResource {
      * @param filename
      * @param is
      * @return
-     * @throws java.lang.ClassNotFoundException
-     * @throws java.sql.SQLException
      */
     @Path("register")
     @POST
@@ -96,8 +94,7 @@ public class GenericResource {
         String storage_date = LocalDate.now().toString();
         try {
             OurDao.startDB();
-            Image image = new Image(title, author, description, keywords, crea_date, storage_date, filename);
-            image.setId(OurDao.enregistrar(title, description, keywords, author, crea_date, storage_date, filename));
+            int id = OurDao.enregistrar(title, description, keywords, author, crea_date, storage_date, filename);
             String basepath = GenericResource.class
                     .getProtectionDomain()
                     .getCodeSource()
@@ -110,27 +107,15 @@ public class GenericResource {
             if (!newdir.exists()) {
                 newdir.mkdir();
             }
-            Files.copy(is, (new File(path + image.getImageName())).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(is, (new File(path + Image.getImageName(filename, id))).toPath(), StandardCopyOption.REPLACE_EXISTING);
             OurDao.stopDB();
         } catch (IOException | ClassNotFoundException | SQLException e) {
+            System.err.println(e.getMessage());
             return Response.serverError().build();
         }
         return Response.ok().build();
     }
 
-    /**
-     *
-     * @param uploadedInputStream
-     * @param filename
-     * @return
-     */
-    /*  @POST
-    @Path("/upload")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public String uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
-                @FormDataParam("filename") String filename){
-        return ""; 
-    }*/
     /**
      * POST method to modify an existing image
      *
@@ -141,24 +126,27 @@ public class GenericResource {
      * @param author
      * @param crea_date
      * @return
-     * @throws java.lang.ClassNotFoundException
-     * @throws java.sql.SQLException
      */
     @Path("modify")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
-    public String modifyImage(@FormParam("id") String id,
+    public Response modifyImage(@FormParam("id") String id,
             @FormParam("title") String title,
             @FormParam("description") String description,
             @FormParam("keywords") String keywords,
             @FormParam("author") String author,
-            @FormParam("creation") String crea_date) throws ClassNotFoundException, SQLException {
+            @FormParam("creation") String crea_date) {
 
-        OurDao.startDB();
-        OurDao.enregistrarCanvi(id, title, description, keywords, author, crea_date, null);
-        OurDao.stopDB();
-        return "";
+        try {
+            OurDao.startDB();
+            OurDao.enregistrarCanvi(id, title, description, keywords, author, crea_date, null);
+            OurDao.stopDB();
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError().build();
+        }
+        return Response.ok().build();
     }
 
     /**
@@ -166,18 +154,44 @@ public class GenericResource {
      *
      * @param id
      * @return
-     * @throws java.lang.ClassNotFoundException
-     * @throws java.sql.SQLException
      */
     @Path("delete")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
-    public String deleteImage(@FormParam("id") String id) throws ClassNotFoundException, SQLException {
-        OurDao.startDB();
-        OurDao.eliminar(id);
-        OurDao.stopDB();
-        return "";
+    public Response deleteImage(@FormParam("id") String id) {
+        try {
+            System.err.println("deleteImage DEBUG: id="+id);
+            OurDao.startDB();
+            OurDao.eliminar(id);
+            int iid = Integer.parseInt(id);
+            String image = searchByID(iid);
+            System.err.println("deleteImage DEBUG: image="+image);
+            OurDao.stopDB();
+            int startIndex = image.lastIndexOf("fileName=") + 1;
+            String filename = image.substring(startIndex, image.indexOf('}', startIndex));
+            String projectName = "RestAD";
+            String basepath = GenericResource.class
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath();
+            basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
+            final String path = basepath + "web/images/";
+            File newdir = new File(path);
+            if (!newdir.exists()) {
+                newdir.mkdir();
+            }
+            File imgfile = new File(path + Image.getImageName(filename, iid));
+            if (!imgfile.delete()) {
+                throw new IOException("La imagen no se ha podido borrar");
+            }
+        } catch (IOException | ClassNotFoundException | NumberFormatException | SQLException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError().build();
+        }
+
+        return Response.ok().build();
     }
 
     /**
@@ -232,18 +246,16 @@ public class GenericResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String searchByID(@PathParam("id") int id) {
-        Image tmp = new Image();//cambiar
+        Image tmp = new Image();
         try {
-            //TODO write your implementation code here:
             HashMap<String, String> map = new HashMap<>();
+            System.err.println("searchById DEBUG: id="+id);
             map.put("id", String.valueOf(id));
             OurDao.startDB();
             ResultSet res;
             res = OurDao.consultar(map);
-            if (res == null) {
-                return "Busqueda vacia";//prova
-            }
             if (res.next()) {
+                System.err.println("searchById DEBUG: se ha encontrado una imagen");
                 tmp.setId(res.getInt("ID"));
                 tmp.setTitle(res.getString("TITLE"));
                 tmp.setAuthor(res.getString("AUTHOR"));
@@ -254,26 +266,7 @@ public class GenericResource {
                 tmp.setFileName(res.getString("FILENAME"));
             }
             OurDao.stopDB();
-
-            //Leer imagen del sistema de ficheros
-            String basepath = GenericResource.class
-                    .getProtectionDomain()
-                    .getCodeSource()
-                    .getLocation()
-                    .getPath();
-            String projectName = "RestAD";
-            basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
-            final String path = basepath + projectName + "/web/images/";
-            File imageFile = new File(path + tmp.getImageName());
-            FileInputStream fis = new FileInputStream(imageFile);
-            byte[] imageBytes;
-            try (BufferedInputStream inStream = new BufferedInputStream(fis)) {
-                imageBytes = new byte[(int) imageFile.length()];
-                inStream.read(imageBytes);
-            }
-            tmp.setBytes(imageBytes);
-
-        } catch (ClassNotFoundException | IOException | SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             System.err.println(ex.getMessage());
             return null;
         }
@@ -290,7 +283,6 @@ public class GenericResource {
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response downloadByID(@PathParam("id") int id) {
-        Image tmp = new Image();
         try {
             HashMap<String, String> map = new HashMap<>();
             map.put("id", String.valueOf(id));
@@ -300,16 +292,10 @@ public class GenericResource {
             if (res == null) {
                 return Response.noContent().build();
             }
-            if (res.next()) {
-                tmp.setId(res.getInt("ID"));
-                tmp.setTitle(res.getString("TITLE"));
-                tmp.setAuthor(res.getString("AUTHOR"));
-                tmp.setDescription(res.getString("DESCRIPTION"));
-                tmp.setKeywords(res.getString("KEYWORDS"));
-                tmp.setCreationDate(res.getString("CREATION_DATE"));
-                tmp.setStorageDate(res.getString("STORAGE_DATE"));
-                tmp.setFileName(res.getString("FILENAME"));
-            }
+
+            res.next();
+            String filename = res.getString("FILENAME");
+            String imgName = Image.getImageName(filename, res.getInt("ID"));
             OurDao.stopDB();
 
             //Leer imagen del sistema de ficheros
@@ -321,10 +307,10 @@ public class GenericResource {
             String projectName = "RestAD";
             basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
             final String path = basepath + projectName + "/web/images/";
-            File imageFile = new File(path + tmp.getImageName());
+            File imageFile = new File(path + imgName);
             return Response
                     .ok(imageFile, MediaType.APPLICATION_OCTET_STREAM)
-                    .header("Content-Disposition", "attachment; filename=\"" + imageFile.getName() + "\"")
+                    .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
                     .build();
 
         } catch (ClassNotFoundException | SQLException ex) {

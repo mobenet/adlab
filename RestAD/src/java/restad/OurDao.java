@@ -154,6 +154,7 @@ public class OurDao {
                     query += "ID = ?";
                     PreparedStatement statement = connection.prepareStatement(query);
                     statement.setInt(1, Integer.parseInt(consultas.get("id")));
+                    System.err.println("consultar DEBUG: id="+Integer.parseInt(consultas.get("id"))+" fullquery="+query);
                     return statement.executeQuery();
                 case "title":
                     query += "TITLE LIKE ? OR ";

@@ -62,7 +62,7 @@
                     if (response.ok) {
                         document.getElementById('success').innerHTML = success;
                     } else {
-                        ses.setItem('errorMessage',"Error interno del servidor");
+                        ses.setItem('errorMessage',"Error interno del servidor: Error al intentar registrar la imagen");
                         window.location.replace('error.jsp')
                     }
                 };

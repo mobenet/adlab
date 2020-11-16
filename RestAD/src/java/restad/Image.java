@@ -117,7 +117,7 @@ public class Image {
         this.fileName = fileName;
     }
 
-    public String getImageName() {
+    public static String getImageName(String fileName, int id) {
 
         if (fileName == null || fileName.isEmpty()) {
             return null;

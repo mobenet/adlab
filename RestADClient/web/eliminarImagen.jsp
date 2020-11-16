@@ -23,7 +23,7 @@
             if (ses.getItem('user') === null) {
                 window.location.replace('login.jsp');
             }
-            var id = '5';
+            const image = JSON.parse(ses.getItem('image'));
             const exit = "Has elegido cancelar la operacion";
             const success = "Tu imagen ha sido eliminada correctamente";
             const message = document.getElementById('success');
@@ -31,9 +31,9 @@
             async function eliminar() {
 
                 const url = 'http://localhost:8080/RestAD/webresources/generic/delete/';
-                var data = new URLSearchParams();
+                let data = new URLSearchParams();
 
-                data.append('id', id);
+                data.append('id', image.id);
                 const response = await fetch(url, {
                     method: 'POST',
                     body: data.toString(),
@@ -43,13 +43,16 @@
                 });
                 const res = await response.text();
                 if (response.ok)
-                    document.getElementById('success').innerHTML = success;
+                    message.innerHTML = success;
+                else {
+                    ses.setItem('errorMessage','Error interno del servidor: Error al intentar eliminar la imagen');
+                    window.location.replace('error.jsp');
+                }
 
             }
 
             function cancelar() {
-                //window.location.href = 'menu.jsp';
-                document.getElementById('success').innerHTML = exit;
+                message.innerHTML = exit;
             }
         </script>
     </body>

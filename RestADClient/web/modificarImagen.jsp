@@ -37,7 +37,7 @@
         <script>
             let ses = window.sessionStorage;
             if (ses.getItem('user') === null) {
-                window.location.replace('menu.jsp');
+                window.location.replace('login.jsp');
             } else {
                 const baseurl = 'http://localhost:8080/RestAD/webresources/generic/';
                 const modifyImg = document.getElementById('modifyImg');
@@ -78,7 +78,10 @@
                     const success = "Tu imagen ha sido modificada correctamente"
                     if (response.ok) {
                         document.getElementById('success').innerHTML = success;
-                    } else window.location.replace('error.jsp');
+                    } else {
+                        ses.setItem('errorMessage','Error interno del servidor: Error al intentar modificar la imagen');
+                        window.location.replace('error.jsp');
+                    }
                 };
             }
 
