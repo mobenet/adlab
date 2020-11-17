@@ -5,9 +5,7 @@
  */
 package restad;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -160,16 +158,16 @@ public class GenericResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
     public Response deleteImage(@FormParam("id") String id) {
+        int iid = Integer.parseInt(id);
+        String image = searchByID(iid);
         try {
-            System.err.println("deleteImage DEBUG: id="+id);
             OurDao.startDB();
-            OurDao.eliminar(id);
-            int iid = Integer.parseInt(id);
-            String image = searchByID(iid);
-            System.err.println("deleteImage DEBUG: image="+image);
+            OurDao.eliminar(iid);
+            System.err.println("deleteImage DEBUG: image=" + image);
             OurDao.stopDB();
-            int startIndex = image.lastIndexOf("fileName=") + 1;
+            int startIndex = image.lastIndexOf("fileName=") + 9;
             String filename = image.substring(startIndex, image.indexOf('}', startIndex));
+            System.err.println("deleteImage DEBUG: filename=" + filename);
             String projectName = "RestAD";
             String basepath = GenericResource.class
                     .getProtectionDomain()
@@ -177,7 +175,7 @@ public class GenericResource {
                     .getLocation()
                     .getPath();
             basepath = basepath.substring(0, basepath.lastIndexOf(projectName));
-            final String path = basepath + "web/images/";
+            final String path = basepath + projectName + "/web/images/";
             File newdir = new File(path);
             if (!newdir.exists()) {
                 newdir.mkdir();
@@ -249,13 +247,11 @@ public class GenericResource {
         Image tmp = new Image();
         try {
             HashMap<String, String> map = new HashMap<>();
-            System.err.println("searchById DEBUG: id="+id);
             map.put("id", String.valueOf(id));
             OurDao.startDB();
             ResultSet res;
             res = OurDao.consultar(map);
             if (res.next()) {
-                System.err.println("searchById DEBUG: se ha encontrado una imagen");
                 tmp.setId(res.getInt("ID"));
                 tmp.setTitle(res.getString("TITLE"));
                 tmp.setAuthor(res.getString("AUTHOR"));
@@ -289,11 +285,10 @@ public class GenericResource {
             OurDao.startDB();
             ResultSet res;
             res = OurDao.consultar(map);
-            if (res == null) {
+            if (!res.next()) {
                 return Response.noContent().build();
             }
 
-            res.next();
             String filename = res.getString("FILENAME");
             String imgName = Image.getImageName(filename, res.getInt("ID"));
             OurDao.stopDB();
@@ -310,7 +305,7 @@ public class GenericResource {
             File imageFile = new File(path + imgName);
             return Response
                     .ok(imageFile, MediaType.APPLICATION_OCTET_STREAM)
-                    .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
+                    .header("Content-Disposition", "attachment; filename=\"" + imageFile.getName() + "\"")
                     .build();
 
         } catch (ClassNotFoundException | SQLException ex) {

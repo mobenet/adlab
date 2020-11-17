@@ -80,21 +80,14 @@ public class OurDao {
         return idI;
     }
 
-    public static boolean eliminar(String x) {
+    public static void eliminar(int id) throws SQLException {
 
         PreparedStatement statement;
         String query;
-        try {
-            int idI = Integer.parseInt(x);
-
-            query = "delete from image where ID = ?";
-            statement = connection.prepareStatement(query);
-            statement.setInt(1, idI);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            return false;
-        }
-        return true;
+        query = "delete from image where ID = ?";
+        statement = connection.prepareStatement(query);
+        statement.setInt(1, id);
+        statement.executeUpdate();
     }
 
     public static boolean enregistrarCanvi(String id, String title, String description,
@@ -136,7 +129,7 @@ public class OurDao {
             for (int i = 0; i < cols.size(); i++) {
                 st.setString(i + 1, cols.get(i));
             }
-            st.setInt(cols.size()+1, Integer.parseInt(id));
+            st.setInt(cols.size() + 1, Integer.parseInt(id));
             st.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -154,7 +147,6 @@ public class OurDao {
                     query += "ID = ?";
                     PreparedStatement statement = connection.prepareStatement(query);
                     statement.setInt(1, Integer.parseInt(consultas.get("id")));
-                    System.err.println("consultar DEBUG: id="+Integer.parseInt(consultas.get("id"))+" fullquery="+query);
                     return statement.executeQuery();
                 case "title":
                     query += "TITLE LIKE ? OR ";
