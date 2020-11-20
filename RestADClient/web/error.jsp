@@ -3,8 +3,6 @@
     Created on : 30-sep-2020, 20:01:13
     Author     : mo
 --%>
-<%@page import="java.io.PrintWriter"%>
-<%@ page isErrorPage = "true"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,44 +11,61 @@
         <title>Página Error</title>
     </head>
     <body>
+        <h3>Oops!</h3>
+        <div id="message">
+            <%
+                Integer statusCode = (Integer) request
+                        .getAttribute("javax.servlet.error.status_code");
+                String servletName = (String) request
+                        .getAttribute("javax.servlet.error.servlet_name");
+                String requestUri = (String) request
+                        .getAttribute("javax.servlet.error.request_uri");
+                if (servletName == null) {
+                    servletName = "Unknown";
+                }
+                if (requestUri == null) {
+                    requestUri = "Unknown";
+                }
+                if (statusCode != null) {
+                    switch (statusCode) {
+                        case 404:
+            %>
+            El recurso que estas buscando no existe!<br>
+            <strong>Requested URI: </strong>
+            <%
+                    out.print(requestUri);
+                    break;
+                case 403:
+            %>
+            El recurso al que estas intentando acceder esta prohibido<br>
+            <strong>Requested URI: </strong>
+            <%
+                    out.print(requestUri);
+                    break;
+                default:
+            %>
+            <strong>Requested URI: </strong>
 
-        <%
-            // Analyze the servlet exception
-            Throwable throwable = (Throwable) request
-                    .getAttribute("javax.servlet.error.exception");
-            Integer statusCode = (Integer) request
-                    .getAttribute("javax.servlet.error.status_code");
-            String servletName = (String) request
-                    .getAttribute("javax.servlet.error.servlet_name");
-            if (servletName == null) {
-                servletName = "Unknown";
+            <%
+                            out.print(requestUri);
+                    }
+                }
+            %>  
+        </div>
+        <br><br>
+        <span id="return"></span>
+        <script>
+            const ses = window.sessionStorage;
+            const err = ses.getItem('errorMessage');
+            if (err !== null) {
+                document.getElementById('message').innerHTML = err;
+                ses.removeItem('errorMessage');
             }
-            String requestUri = (String) request
-                    .getAttribute("javax.servlet.error.request_uri");
-            System.err.println(requestUri);
-            if (requestUri == null) {
-                requestUri = "Unknown";
-            }
-
-            // Set response content type
-            response.setContentType("text/html");
-
-            PrintWriter outo = response.getWriter();
-            outo.write("<html><head><title>Exception/errors</title></head><body>");
-            outo.write("<h3>Oops!</h3>");
-            if (statusCode != 500) {
-                outo.write("<strong>Requested URI</strong>: " + requestUri);
-            } else {
-                outo.write("<p>" + throwable.getMessage() + "</p>");
-            }
-
-            outo.write("<br><br>");
-            outo.write("<a href=\"menu.jsp\">Vuelve al menú</a>");
-            outo.write("</body></html>");
-
-        %>  
-        <!--- <pre> exception.printStackTrace(response.getWriter()); %> </pre>
-        <!--<h1>Error. Usuari o password incorrectes</h1>-->
-        <br><br><a href="login.jsp">Vuelve al Login</a>
+            const ret = document.getElementById('return');
+            if (ses.getItem('user') === null) {
+                ret.innerHTML = '<a href="login.jsp">Vuelve al login</a>';
+            } else
+                ret.innerHTML = '<a href="menu.jsp">Vuelve al menu</a>';
+        </script>
     </body>
 </html>

@@ -23,7 +23,7 @@
         if (user === null)
             window.location.replace('login.jsp');
         function logout(){
-            ses.removeItem('user');
+            ses.clear();
             window.location.replace('login.jsp');
         }
     </script>

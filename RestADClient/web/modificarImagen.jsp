@@ -16,7 +16,7 @@
         <div id="success">
 
             <form id="modifyImg">
-                <h1>Modifica tu imagen como deseess</h1>
+                <h1>Modifica tu imagen como desees</h1>
                 Titulo: 
                 <input type="text" name="title" ><br><br>
                 Descripción: 
