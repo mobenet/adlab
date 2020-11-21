@@ -62,10 +62,10 @@ public class buscarImagen extends HttpServlet {
                 String keywords = request.getParameter("keywords");
                 String title = request.getParameter("title");
                 ArrayList<List<Object>> searchArray = new ArrayList<>();
-                if (title != null) searchArray.add(searchbyTitle(title));
-                if (keywords != null) searchArray.add(searchbyKeywords(keywords));
-                if (author != null) searchArray.add(searchbyAuthor(author));
-                if (creationDate != null)  searchArray.add(searchbyCreaDate(creationDate));
+                if (!title.isEmpty()) searchArray.add(searchbyTitle(title));
+                if (!keywords.isEmpty()) searchArray.add(searchbyKeywords(keywords));
+                if (!author.isEmpty()) searchArray.add(searchbyAuthor(author));
+                if (!creationDate.isEmpty())  searchArray.add(searchbyCreaDate(creationDate));
                 List<Image> searchResult = combineSearch(searchArray);
                 if (searchResult.isEmpty()) {
                     out.println("No hay resultados con las entradas correspondientes");
