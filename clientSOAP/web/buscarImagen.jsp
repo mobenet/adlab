@@ -19,7 +19,7 @@
         <h1>Búsqueda de imagenes</h1>
         <h2>Palabras clave a buscar (una por campo)</h2> 
         <br><br>
-        <form method="POST" action="buscarImagen" enctype="multipart/form-data">
+        <form method="POST" action="buscarImagen">
             Titulo: 
             <input type="text" value="" name="title"><br><br>
             Palabras clave: 

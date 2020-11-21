@@ -48,52 +48,12 @@ public class formModificarImagen extends HttpServlet {
                 response.sendRedirect("login.jsp");
             } else {
                 try {
-                    out.println("<table border=1>"
-                            + "<tr>"
-                            + "<th>Titulo</th>"
-                            + "<th>Descripcion</th>"
-                            + "<th>Palabras Clave</th>"
-                            + "<th>Autor</th>"
-                            + "<th>Fecha de creacion</th>"
-                            + "<th>Nombre del archivo</th>"
-                            + "</tr>");
-                    
 
-                    int id = Integer.parseInt(ses.getAttribute("imageId").toString()); 
-                  
-                    Image img = searchbyId(id);
-
-                    out.println("<tr><td>" + img.getTitle() + "</td>");
-                    out.println("<td>" + img.getDescription() + "</td>");
-                    out.println("<td>" + img.getKwords() + "</td>");
-                    out.println("<td>" + img.getAuth() + "</td>");
-                    out.println("<td>" + img.getCDate() + "</td>");
-                    out.println("<td><a href=image.jsp?name=" + img.getFilename() + "&id=" + id + ">" + img.getFilename() + "</a>");
-                    
-                    out.println(" </td> </tr>");
-                    
-                    out.println("</table><br><br>");//<a href=\"menu.jsp\"> Vuelve al menu</a>-->");
-               
-                    String autor = img.getAuth(); 
-                    String fileN = img.getFilename();
-                    String title = img.getTitle();
-                    String desc = img.getDescription();
-                    String key = img.getKwords(); 
-                    String crea = img.getCDate();
-                    ses.setAttribute("autor", autor);
-                    ses.setAttribute("fileN", fileN);
-                    ses.setAttribute("title", title);
-                    ses.setAttribute("desc", desc);
-                    ses.setAttribute("crea", crea);
-                    ses.setAttribute("key", key);
                     out.println("<h1>Modifica tu imagen como desees</h1>"
                     + "<form method=\"POST\" action = \"modificarImagen\">"
                     + "Titulo: <input type = \"text\" name = \"titulo\"  /> <br> <br>"
                     + "Descripción: <input type = \"text\" name = \"descripcion\"  /> <br> <br>"
                     + "Palabras clave: <input type=\"text\" name = \"clave\"  /> <br> <br>"
-                    + "Fecha creación: <input type=date name = \"fechaC\"  /> <br> <br>"
-                    + "Autor: "+autor+"<br><br>"      
-                    + "Nombre archivo: " + fileN + " <br><br>"
                     + "<input type = \"submit\" name = \"submit\" value = \"Modificar\" /> </form> <br> <br>"
                     + "<a href = \"menu.jsp\"> Vuelve al Menú</a>");
                     
@@ -144,11 +104,4 @@ public class formModificarImagen extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private Image searchbyId(int id) {
-        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
-        // If the calling of port operations may lead to race condition some synchronization is required.
-        org.me.image.ImageBulkService port = service.getImageBulkServicePort();
-        return port.searchbyId(id);
-    }
 }

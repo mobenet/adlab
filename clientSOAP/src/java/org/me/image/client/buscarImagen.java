@@ -33,7 +33,7 @@ import org.me.image.ImageBulkService_Service;
 @MultipartConfig
 
 public class buscarImagen extends HttpServlet {
-
+    
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_8080/servidorSOAP/ImageBulkService.wsdl")
     private ImageBulkService_Service service;
 
@@ -61,11 +61,20 @@ public class buscarImagen extends HttpServlet {
                 String creationDate = request.getParameter("cdate");
                 String keywords = request.getParameter("keywords");
                 String title = request.getParameter("title");
+
                 ArrayList<List<Object>> searchArray = new ArrayList<>();
-                if (title != null) searchArray.add(searchbyTitle(title));
-                if (keywords != null) searchArray.add(searchbyKeywords(keywords));
-                if (author != null) searchArray.add(searchbyAuthor(author));
-                if (creationDate != null)  searchArray.add(searchbyCreaDate(creationDate));
+                if (!title.isEmpty()) {
+                    searchArray.add(searchbyTitle(title));
+                }
+                if (!keywords.isEmpty()) {
+                    searchArray.add(searchbyKeywords(keywords));
+                }
+                if (!author.isEmpty()) {
+                    searchArray.add(searchbyAuthor(author));
+                }
+                if (!creationDate.isEmpty()) {
+                    searchArray.add(searchbyCreaDate(creationDate));
+                }
                 List<Image> searchResult = combineSearch(searchArray);
                 if (searchResult.isEmpty()) {
                     out.println("No hay resultados con las entradas correspondientes");
@@ -86,7 +95,7 @@ public class buscarImagen extends HttpServlet {
                             + "                <th>Autor</th>\n"
                             + "                <th>Nombre del archivo</th>\n"
                             + "            </tr>");
-                    for(Image img: searchResult){
+                    for (Image img : searchResult) {
                         out.println("<tr>");
                         out.println("<td>" + img.getTitle() + "</td>");
                         out.println("<td>" + img.getDescription() + "</td>");
@@ -161,54 +170,56 @@ public class buscarImagen extends HttpServlet {
         return "Short description";
     }// </editor-fold>
     
-    private List<Image> combineSearch(List<List<Object>> searchResult){
-        if(searchResult.isEmpty())return Arrays.asList();
+    private List<Image> combineSearch(List<List<Object>> searchResult) {
+        if (searchResult.isEmpty()) {
+            return Arrays.asList();
+        }
         ArrayList<Image> res = new ArrayList<>();
         searchResult.get(0).forEach(o -> {
-            Image img = (Image)o;
+            Image img = (Image) o;
             res.add(img);
         });
         searchResult.forEach(list -> {
             ArrayList<Image> tmp = new ArrayList<>();
             list.forEach(o -> {
-                Image img = (Image)o;
+                Image img = (Image) o;
                 tmp.add(img);
             });
-            intersect(res,tmp);
+            intersect(res, tmp);
         });
         return res;
     }
     
-    private void intersect(ArrayList<Image> acc, List<Image> other){
+    private void intersect(ArrayList<Image> acc, List<Image> other) {
         acc.removeIf(e -> !other.stream().anyMatch(img -> (img.getId() == e.getId())));
     }
-
+    
     private java.util.List<java.lang.Object> searchbyAuthor(java.lang.String author) {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
         org.me.image.ImageBulkService port = service.getImageBulkServicePort();
         return port.searchbyAuthor(author);
     }
-
+    
     private java.util.List<java.lang.Object> searchbyCreaDate(java.lang.String creaDate) {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
         org.me.image.ImageBulkService port = service.getImageBulkServicePort();
         return port.searchbyCreaDate(creaDate);
     }
-
+    
     private java.util.List<java.lang.Object> searchbyKeywords(java.lang.String keywords) {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
         org.me.image.ImageBulkService port = service.getImageBulkServicePort();
         return port.searchbyKeywords(keywords);
     }
-
+    
     private java.util.List<java.lang.Object> searchbyTitle(java.lang.String title) {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
         org.me.image.ImageBulkService port = service.getImageBulkServicePort();
         return port.searchbyTitle(title);
     }
-
+    
 }

@@ -42,11 +42,8 @@ public class modificarImagen extends HttpServlet {
         if (ses.getAttribute("user") == null) {
             response.sendRedirect("login.jsp");
         } else {
-            String autor = (String) ses.getAttribute("autor");
-            String fileN = (String) ses.getAttribute("fileN");
             String title = (String) ses.getAttribute("title");
             String desc = (String) ses.getAttribute("desc");
-            String crea = (String) ses.getAttribute("crea");
             String key = (String) ses.getAttribute("key");
             int id = Integer.parseInt(ses.getAttribute("imageId").toString());
 
@@ -72,15 +69,6 @@ public class modificarImagen extends HttpServlet {
                 } else {
                     img.setKwords(request.getParameter("clave"));
                 }
-
-                if ("".equals(request.getParameter("fechaC"))) {
-                    img.setCDate(crea);
-                } else {
-                    img.setCDate(request.getParameter("fechaC"));
-                }
-
-                img.setAuth(autor);
-                img.setFilename(fileN);
 
                 int idI = modifyImage(img);
                 out.println("<p>Se ha modificado la imagen exitosamente</p>");

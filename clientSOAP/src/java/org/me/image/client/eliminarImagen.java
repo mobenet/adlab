@@ -52,9 +52,8 @@ public class eliminarImagen extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             int x = Integer.parseInt(session1.getAttribute("imageId").toString()); 
-            Image img = searchbyId(x);
             if (request.getParameter("Aceptar") != null) {
-                int id = deleteImage(img);
+                int id = deleteImage(null);
                 eliminat = true;
             } else if (request.getParameter("Cancelar") != null) {
                 out.println("Has cancelado la operación<br>");

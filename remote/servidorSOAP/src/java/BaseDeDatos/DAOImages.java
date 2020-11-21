@@ -229,7 +229,7 @@ public  static boolean ModifyImage(int id,String title, String description, Stri
                 ++cont;
             }
             statement.setInt(cont, id);
-            System.out.println(query);
+            System.err.println(query+" "+title+" "+id+" "+description+" "+keywords);
             int result = statement.executeUpdate();
             if (result == 1 ) return true;
             return false;
